@@ -1,12 +1,11 @@
 env:
     global:
-        - REPO_DIR=scipy
+        - REPO_DIR=SHTOOLS
         # Also see DAILY_COMMIT below
         - BUILD_COMMIT=9bcaf3f6c5b9e936d6ed95bd6e189f40e89f8898
         - PLAT=x86_64
-        - NP_BUILD_DEP="numpy==1.8.2"
-        - CYTHON_BUILD_DEP="Cython==0.26.1"
-        - NP_TEST_DEP="numpy==1.8.2"
+        - NP_BUILD_DEP="numpy"
+        - CYTHON_BUILD_DEP="Cython"
         - UNICODE_WIDTH=32
         - MANYLINUX_URL="https://5cf40426d9f06eb7461d-6fe47d9331aba7cd62fc36c7196769e4.ssl.cf2.rackcdn.com"
         - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
@@ -16,6 +15,10 @@ env:
             "fne+dO/N+Zv8pusPVO6S58p7lFWLDIwjXwf/IgBPxGSdDFEQVY8xl0+nGPNNzYZfmX/inBrb/3+8el9sggC+X7KG6mGmCtcpwems2sWn6XY5OQ+kWl8SEdDs2SiAsrieqbC3d1cmMoHyddX/YdGWVSdIji70nRER0j9wjNwYNlE="
         # Commit when running from daily branch
         - DAILY_COMMIT=master
+
+branches:
+  only:
+  - master
 
 language: python
 # Default Python version is usually 2.7
@@ -38,45 +41,13 @@ matrix:
         - UNICODE_WIDTH=16
     - os: linux
       env:
-        - MB_PYTHON_VERSION=2.7
-        - PLAT=i686
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - PLAT=i686
-        - UNICODE_WIDTH=16
-    - os: linux
-      env:
         - MB_PYTHON_VERSION=3.4
-        # Python 3.4 needs more recent numpy (for testing only)
-        - NP_TEST_DEP=numpy==1.9.3
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.4
-        - PLAT=i686
-        - NP_TEST_DEP=numpy==1.9.3
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.5
-        - NP_BUILD_DEP=numpy==1.9.3
-        - NP_TEST_DEP=numpy==1.9.3
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.5
-        - PLAT=i686
-        - NP_BUILD_DEP=numpy==1.9.3
-        - NP_TEST_DEP=numpy==1.9.3
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.6
-        - NP_BUILD_DEP=numpy==1.11.3
-        - NP_TEST_DEP=numpy==1.11.3
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.6
-        - PLAT=i686
-        - NP_BUILD_DEP=numpy==1.11.3
-        - NP_TEST_DEP=numpy==1.11.3
     - os: osx
       language: generic
       env:
@@ -85,7 +56,6 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.4
-        - NP_TEST_DEP=numpy==1.9.3
     - os: osx
       language: generic
       env:
@@ -93,16 +63,16 @@ matrix:
         # OSX build of scipy on Python 3.5 needs built 1.8.2 wheel to avoid
         # https://github.com/numpy/numpy/issues/6204.  numpy 1.8.2 wheel for
         # Python 3.5 at nipy manylinux URL.
-        - NP_BUILD_DEP=numpy==1.8.2
-        - NP_TEST_DEP=numpy==1.9.3
     - os: osx
       language: generic
       env:
         - MB_PYTHON_VERSION=3.6
-        - NP_BUILD_DEP=numpy==1.11.3
-        - NP_TEST_DEP=numpy==1.11.3
 
 before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                                     ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc                                ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then travis_wait 30 brew install openblas            ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then travis_wait 30 brew install fftw --with-fortran ; fi
     - if [ "$TRAVIS_BRANCH" == "daily" ]; then
           CONTAINER="pre-release";
           BUILD_COMMIT=${DAILY_COMMIT:-$BUILD_COMMIT};
@@ -118,8 +88,6 @@ before_install:
 
 install:
     # Maybe get and clean and patch source
-    - clean_code $REPO_DIR $BUILD_COMMIT
-    - ./patch_code.sh $REPO_DIR
     - build_wheel $REPO_DIR $PLAT
 
 script:

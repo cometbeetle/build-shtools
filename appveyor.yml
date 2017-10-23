@@ -7,87 +7,74 @@ max_jobs: 100
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
+  - 'C:\Tools\vcpkg\installed'
+  - 'C:\Tools\vcpkg\packages'
+  #- 'C:\Tools\vcpkg\buildtrees'
 
-environment:
+environment: 
   global:
-      MINGW_32: C:\mingw-w64\i686-6.3.0-posix-dwarf-rt_v5-rev1\mingw32\bin
-      MINGW_64: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin
-      OPENBLAS_32: https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com/openblas-5f998ef_gcc7_1_0_win32.zip
-      OPENBLAS_64: https://3f23b170c54c2533c070-1c8a9b3114517dc5fe17b7c3f8c63a43.ssl.cf2.rackcdn.com/openblas-5f998ef_gcc7_1_0_win64.zip
-      OPENBLAS_32_SHA256: 0a12804b08d475179a0411936f509b44d7512f084b4a81c2fa3abe8c9ac4ee09
-      OPENBLAS_64_SHA256: 8f11d8a5a79795a3a1ccb2326c979a0ca426e623eee93f8e35239e3c21e62cd6
-      CYTHON_BUILD_DEP: Cython==0.26.1
-      NUMPY_TEST_DEP: numpy==1.13.1
-      TEST_MODE: fast
+      NUMPY_HEAD: https://github.com/xoviat/numpy.git
+      NUMPY_BRANCH: flang
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
-      WHEELHOUSE_UPLOADER_USERNAME: travis-worker
-      WHEELHOUSE_UPLOADER_SECRET:
-        secure:
-            jIyaD+VWmTlDGXThsKAkiLq8iljgYHiriq+kEUuW9tHj67R5BapLxLjbfco2nt8Y
-      BUILD_COMMIT: 9bcaf3f6c5b9e936d6ed95bd6e189f40e89f8898
-      DAILY_COMMIT: master
+      TEST_TIMEOUT: 1000
+      CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
 
   matrix:
-    - PYTHON: C:\Python36
-      PYTHON_VERSION: 3.6
-      PYTHON_ARCH: 32
-      NUMPY_BUILD_DEP: numpy==1.12.1
-
     - PYTHON: C:\Python36-x64
       PYTHON_VERSION: 3.6
       PYTHON_ARCH: 64
-      NUMPY_BUILD_DEP: numpy==1.12.1
-
-    - PYTHON: C:\Python35
-      PYTHON_VERSION: 3.5
-      PYTHON_ARCH: 32
-      NUMPY_BUILD_DEP: numpy==1.10.4
-
-    - PYTHON: C:\Python35-x64
-      PYTHON_VERSION: 3.5
-      PYTHON_ARCH: 64
-      NUMPY_BUILD_DEP: numpy==1.10.4
-
-    - PYTHON: C:\Python34
-      PYTHON_VERSION: 3.4
-      PYTHON_ARCH: 32
-      NUMPY_BUILD_DEP: numpy==1.10.4
-
-    - PYTHON: C:\Python34-x64
-      PYTHON_VERSION: 3.4
-      PYTHON_ARCH: 64
-      NUMPY_BUILD_DEP: numpy==1.10.4
-
-    - PYTHON: C:\Python27
-      PYTHON_VERSION: 2.7
-      PYTHON_ARCH: 32
-      NUMPY_BUILD_DEP: numpy==1.10.4
-
-    - PYTHON: C:\Python27-x64
-      PYTHON_VERSION: 2.7
-      PYTHON_ARCH: 64
-      NUMPY_BUILD_DEP: numpy==1.10.4
+      TEST_MODE: full
 
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
   - "ECHO \"%APPVEYOR_SCHEDULED_BUILD%\""
-  - ps: >-
-      if ($env:APPVEYOR_REPO_BRANCH -eq "daily") {
-        $env:CONTAINER = "pre-release"
-        if ($env:DAILY_COMMIT) { $env:BUILD_COMMIT = $env:DAILY_COMMIT }
-        $env:NPY_RELAXED_STRIDES_DEBUG = 1
-      } else {
-        $env:CONTAINER = "wheels"
-        $env:UPLOAD_ARGS = "--no-update-index"
+  # If there is a newer build queued for the same PR, cancel this one.
+  # The AppVeyor 'rollout builds' option is supposed to serve the same
+  # purpose but it is problematic because it tends to cancel builds pushed
+  # directly to master instead of just PR builds (or the converse).
+  # credits: JuliaLang developers.
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+          Write-Host "There are newer queued builds for this pull request, skipping build."
+          Exit-AppveyorBuild
+        }
+  - ps: |
+      If (($env:SKIP_NOTAG -eq "true") -and ($env:APPVEYOR_REPO_TAG -ne "true")) {
+          Write-Host "Skipping build, not at a tag."
+          Exit-AppveyorBuild
       }
-
 install:
-  - cmd: echo "Filesystem root:"
-  - dir C:\
+  # Get needed submodules
+  - git submodule update --init --recursive
+  
+  # Update vcpkg to patch
+  - ps: |
+      git clone -q --branch=fftw-cmake https://github.com/xoviat/vcpkg.git
+      cd vcpkg
+      rm -r -Force C:\Tools\vcpkg\ports
+      cp -r ports C:\Tools\vcpkg
+      cd ..
+      rm -r -Force vcpkg
 
-  - echo "Installed SDKs:"
-  - dir "C:/Program Files/Microsoft SDKs/Windows"
+  # Add path, activate `conda` and update conda.
+  - cmd: call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
+  - cmd: conda update --yes --quiet conda
+  
+  # Add our channels.
+  - cmd: conda config --add channels defaults
+  - cmd: conda config --add channels conda-forge
+  - cmd: conda install --yes flang mkl
+
+  # Install fftw3
+  - vcpkg remove --outdated --recurse
+  - vcpkg install fftw3:x64-windows
+  
+  # Copy dependent DLLs
+  - ps: cp "C:\Tools\vcpkg\installed\x64-windows\bin\*.dll" ".\SHTOOLS\pyshtools"
+  - ps: cp "$env:CONDA_INSTALL_LOCN\Library\bin\*.dll" ".\SHTOOLS\pyshtools"
+  - ps: ls ".\SHTOOLS\pyshtools"
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -96,96 +83,36 @@ install:
 
   # Check that we have the expected version and architecture for Python
   - python --version
+  - flang --version
+  
   - >-
      python -c "import sys,platform,struct;
      print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
-
-  # Get needed submodules
-  - git submodule update --init scipy numpy-distutils
-
-  # Download and install static "openblas.a" to PYTHON\lib
+  
+  # Upgrade to the latest pip.
+  - python -m pip install -U pip setuptools wheel
+  
+  # Install the released numpy
+  - pip install numpy
+  
   - ps: |
-      $PYTHON_ARCH = $env:PYTHON_ARCH
-      $PYTHON = $env:PYTHON
-      If ($PYTHON_ARCH -eq 32) {
-          $OPENBLAS = $env:OPENBLAS_32
-          $OPENBLAS_SHA256 = $env:OPENBLAS_32_SHA256
-      } Else {
-          $OPENBLAS = $env:OPENBLAS_64
-          $OPENBLAS_SHA256 = $env:OPENBLAS_64_SHA256
-      }
-      $clnt = new-object System.Net.WebClient
-      $file = "$(New-TemporaryFile).zip"
-      $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
-      $destination = "$PYTHON\lib\openblas.a"
+      ls -r C:\Tools\vcpkg | Out-File listing.txt
+      Push-AppveyorArtifact .\listing.txt
 
-      echo $file
-      echo $tmpdir
-      echo $OPENBLAS
-
-      $clnt.DownloadFile($OPENBLAS,$file)
-
-      $downloaded_hash = Get-FileHash -Algorithm SHA256 $file
-      if ($downloaded_hash.hash -ne $OPENBLAS_SHA256) {
-          $downloaded_hash | Format-List
-          echo $OPENBLAS_SHA256
-          throw "Downloaded OPENBLAS zip SHA256 does not match."
-      }
-
-      Expand-Archive $file $tmpdir      
-
-      rm $tmpdir\$PYTHON_ARCH\lib\*.dll.a
-      $lib = ls $tmpdir\$PYTHON_ARCH\lib\*.a | ForEach { ls $_ } | Select-Object -first 1
-      echo $lib
-
-      cp $lib $destination
-      ls $destination
-
-  # Upgrade to the latest pip and setuptools.
-  - python -m pip install -U pip setuptools
-
-  # Pin wheel to 0.26 to avoid Windows ABI tag for built wheel
-  - pip install "wheel==0.26"
-
-  # Install build requirements.
-  - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%"
-
-  # Replace numpy distutils with a version that can build with msvc + mingw-gfortran.
+  # Replace numpy distutils with a version that can build with msvc + mingw-gfortran
   - ps: |
       $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
       rm -r -Force "$NumpyDir\distutils"
-      mv numpy-distutils\numpy\distutils $NumpyDir
-      rm -r -Force "$NumpyDir\compat"
-      mv numpy-distutils\numpy\compat $NumpyDir
+      $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
+      echo $env:NUMPY_HEAD
+      echo $env:NUMPY_BRANCH
+      git clone -q --depth=1 -b $env:NUMPY_BRANCH $env:NUMPY_HEAD $tmpdir
+      mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
-  - cd scipy
-  - git checkout %BUILD_COMMIT%
-  # Append license text relevant for the built wheel
-  - type ..\LICENSE_win32.txt >> LICENSE.txt
-  # Copy over additional DLLs to bundle to the wheels
-  #
-  # The find commands below are mainly to find the paths where the libraries are.
-  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 14.0" -type f -name 'msvcp*.dll'
-  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 10.0" -type f -name 'msvcp*.dll'
-  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 9.0" -type f -name 'msvcp*.dll'
-  # * Python 3.6
-  - mkdir build\lib.win32-3.6\scipy\extra-dll
-  - mkdir build\lib.win-amd64-3.6\scipy\extra-dll
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\scipy\extra-dll\"
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\scipy\extra-dll\"
-  # * Python 3.5
-  - mkdir build\lib.win32-3.5\scipy\extra-dll
-  - mkdir build\lib.win-amd64-3.5\scipy\extra-dll
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.5\scipy\extra-dll\"
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.5\scipy\extra-dll\"
-  # * Python 3.4
-  #   Didn't find the redist libs on appveyor for MSVC 10.0; hopefully few people use this old Python.
-  # * Python 2.7
-  - mkdir build\lib.win32-2.7\scipy\extra-dll
-  - mkdir build\lib.win-amd64-2.7\scipy\extra-dll
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\x86\Microsoft.VC90.CRT"\*.* "build\lib.win32-2.7\scipy\extra-dll\"
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\amd64\Microsoft.VC90.CRT"\*.* "build\lib.win-amd64-2.7\scipy\extra-dll\"
+  - ps: cd SHTOOLS
+  - ps: ls .
+
   # Build wheel using setup.py
   - ps: |
       $PYTHON_ARCH = $env:PYTHON_ARCH
@@ -196,8 +123,9 @@ build_script:
       }
       $env:Path += ";$MINGW"
       $env:NPY_NUM_BUILD_JOBS = "4"
-  - python setup.py bdist_wheel
-  - ps: |
+
+      pip wheel -v -v -v .
+
       # Upload artifact to Appveyor immediately after build
       ls dist -r | Foreach-Object {
           appveyor PushArtifact $_.FullName
@@ -206,17 +134,19 @@ build_script:
 
 before_test:
   # Install test requirements.
-  - python -m pip install pytest pytest-xdist pytest-faulthandler pytest-env Pillow mpmath matplotlib
+  - python -m pip install pytest pytest-xdist pytest-faulthandler pytest-env Pillow mpmath matplotlib nbformat nbconvert jupyter_client
 
   # Upgrade numpy to the version used for testing
-  - python -m pip install "%NUMPY_TEST_DEP%"
+
 
 test_script:
-  - cd ..
-  - mkdir tmp_test
-  - cd tmp_test
-  - python ..\check_license.py
-  - python ..\run_scipy_tests.py %TEST_MODE% -- -n6 --junitxml=%cd%\junit-results.xml -rfEX
+  - python examples/notebooks/test_notebooks.py
+
+
+
+
+
+
 
 after_test:
   # Upload test results to Appveyor
