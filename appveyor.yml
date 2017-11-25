@@ -5,6 +5,10 @@ clone_depth: 50
 # No reason for us to restrict the number concurrent jobs
 max_jobs: 100
 
+branches:
+  only:
+    - master
+
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
   - 'C:\Tools\vcpkg\installed'
@@ -136,16 +140,9 @@ before_test:
   # Install test requirements.
   - python -m pip install pytest pytest-xdist pytest-faulthandler pytest-env Pillow mpmath matplotlib nbformat nbconvert jupyter_client
 
-  # Upgrade numpy to the version used for testing
-
 
 test_script:
   - python examples/notebooks/test_notebooks.py
-
-
-
-
-
 
 
 after_test:
