@@ -21,14 +21,16 @@ environment:
       NUMPY_BRANCH: flang
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
-      TEST_TIMEOUT: 1000
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
 
   matrix:
     - PYTHON: C:\Python36-x64
       PYTHON_VERSION: 3.6
       PYTHON_ARCH: 64
-      TEST_MODE: full
+
+    - PYTHON: C:\Python35-x64
+      PYTHON_VERSION: 3.5
+      PYTHON_ARCH: 64
 
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
@@ -131,47 +133,3 @@ build_script:
           appveyor PushArtifact $_.FullName
           pip install $_.FullName
       }
-
-before_test:
-  # Install test requirements.
-  - python -m pip install pytest pytest-xdist pytest-faulthandler pytest-env Pillow mpmath matplotlib nbformat nbconvert jupyter_client
-
-
-test_script:
-  - python examples/notebooks/test_notebooks.py
-
-
-after_test:
-  # Upload test results to Appveyor
-  - ps: |
-      If (Test-Path .\junit-results.xml) {
-        (new-object net.webclient).UploadFile(
-          "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)",
-          (Resolve-Path .\junit-results.xml)
-        )
-      }
-      $LastExitCode = 0
-
-  # Remove old or huge cache files to hopefully not exceed the 1GB cache limit.
-  #
-  # If the cache limit is reached, the cache will not be updated (of not even
-  # created in the first run). So this is a trade of between keeping the cache
-  # current and having a cache at all.
-  # NB: This is done only `on_success` since the cache in uploaded only on
-  # success anyway.
-  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -type f -mtime +360 -delete
-  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -type f -size +10M -delete
-  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -empty -delete
-  # Show size of cache
-  - C:\cygwin\bin\du -hs "%LOCALAPPDATA%\pip\Cache"
-
-on_success:
-  # Upload the generated wheel package to Rackspace
-  # On Windows, Apache Libcloud cannot find a standard CA cert bundle so we
-  # disable the ssl checks.
-  - cd ..\scipy
-  - pip install wheelhouse-uploader
-  - python -m wheelhouse_uploader upload
-    --no-ssl-check --local-folder=dist
-    %UPLOAD_ARGS%
-    %CONTAINER%
