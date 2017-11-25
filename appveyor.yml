@@ -53,14 +53,11 @@ install:
   # Get needed submodules
   - git submodule update --init --recursive
   
-  # Update vcpkg to patch
+  # Update vcpkg
   - ps: |
-      git clone -q --branch=fftw-cmake https://github.com/xoviat/vcpkg.git
-      cd vcpkg
-      rm -r -Force C:\Tools\vcpkg\ports
-      cp -r ports C:\Tools\vcpkg
-      cd ..
-      rm -r -Force vcpkg
+      cd C:\Tools\vcpkg
+      git pull -q
+      cd $env:APPVEYOR_BUILD_FOLDER
 
   # Add path, activate `conda` and update conda.
   - cmd: call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
@@ -75,11 +72,6 @@ install:
   - vcpkg remove --outdated --recurse
   - vcpkg install fftw3:x64-windows
   
-  # Copy dependent DLLs
-  - ps: cp "C:\Tools\vcpkg\installed\x64-windows\bin\*.dll" ".\SHTOOLS\pyshtools"
-  - ps: cp "$env:CONDA_INSTALL_LOCN\Library\bin\*.dll" ".\SHTOOLS\pyshtools"
-  - ps: ls ".\SHTOOLS\pyshtools"
-
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
@@ -98,10 +90,6 @@ install:
   
   # Install the released numpy
   - pip install numpy
-  
-  - ps: |
-      ls -r C:\Tools\vcpkg | Out-File listing.txt
-      Push-AppveyorArtifact .\listing.txt
 
   # Replace numpy distutils with a version that can build with msvc + mingw-gfortran
   - ps: |
@@ -115,7 +103,15 @@ install:
 
 build_script:
   - ps: cd SHTOOLS
-  - ps: ls .
+
+  # Copy dependent DLLs
+  - ps: md -Force .\build\lib.win-amd64-3.6\pyshtools
+  - ps: cp "C:\Tools\vcpkg\installed\x64-windows\bin\*.dll" ".\build\lib.win-amd64-3.6\pyshtools"
+  - ps: cp "$env:CONDA_INSTALL_LOCN\Library\bin\*.dll" ".\build\lib.win-amd64-3.6\pyshtools"
+
+  - ps: md -Force .\build\lib.win-amd64-3.5\pyshtools
+  - ps: cp "C:\Tools\vcpkg\installed\x64-windows\bin\*.dll" ".\build\lib.win-amd64-3.5\pyshtools"
+  - ps: cp "$env:CONDA_INSTALL_LOCN\Library\bin\*.dll" ".\build\lib.win-amd64-3.5\pyshtools"
 
   # Build wheel using setup.py
   - ps: |
