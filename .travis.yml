@@ -12,7 +12,7 @@ env:
         # Following generated with
         # travis encrypt -r MacPython/scipy-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
         - secure:
-            "fne+dO/N+Zv8pusPVO6S58p7lFWLDIwjXwf/IgBPxGSdDFEQVY8xl0+nGPNNzYZfmX/inBrb/3+8el9sggC+X7KG6mGmCtcpwems2sWn6XY5OQ+kWl8SEdDs2SiAsrieqbC3d1cmMoHyddX/YdGWVSdIji70nRER0j9wjNwYNlE="
+            "KRvIrCgEd5j9lESFZvzBdksAFrtAGquMO8OK1HHw54aTwqWtQ4VW05gyZowxs2LzG2/Lt9Rhu+Iquznmc/aSmvqBDHB7miHXjs6rxikTeNypOPNTSvAuUdF/iub3gMHQlyN6Krm/vPMlOYjVRyK5erzcjItQLz3NMxzpDAPW8Ho8Vrq/A/YZbALmH3NI13x0f0VMs06TmgOb8PKJj8wty14bB3KmXqPGo2itTKMVPpVasTuQVTUnsFKKimng8+9Hom9To/bv1vENUsSJ4DWPvHPWqHnWJSC9T9AjCqJl4DztULJmz7IxhUWuD2pxOdYPIqHjEwHy55IERaR+VgZQWcxqtmN2qjzyQfq68Z/8uCFnOpyoIIZwXr9jCjIIOerXbbUZ5ny1T8FVDsrTqfb4yxjMBp04qy1VeYsG+kYsYwrhSBDeIzj33m1fkeMhsVo8il3dvaVe6/wLBIKyiQch4KeTJFUWaiw2HyvwDYJkV1+QkKkGIeogZ920GKYpaxYUshOVtt/k9bpiGYNqD1mKdgT4g0gTNUe/vhLhqJiKl+quHl76U9lW0VLUQ5EYhLL6oDhQ+XIncGkTGOclbWa44LXAb/xBIPvOOorrjtKx/4CvgSD3iO5b3TqDXtkLNGoZ28/u1F3GEhakckxStzMUBOVJrYONh33Eecnh3IFcbZU="
         # Commit when running from daily branch
         - DAILY_COMMIT=master
 
@@ -94,9 +94,6 @@ script:
     - install_run $PLAT
 
 after_success:
-    # Upload wheels to Rackspace container
-    - pip install wheelhouse-uploader
-    - python -m wheelhouse_uploader upload --local-folder
-          ${TRAVIS_BUILD_DIR}/wheelhouse/
-          $UPLOAD_ARGS
-          $CONTAINER
+    # Upload wheels to PYPI
+    - pip install twine
+    - twine upload --skip-existing --user xoviat --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
