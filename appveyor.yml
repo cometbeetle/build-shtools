@@ -22,9 +22,8 @@ environment:
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
-      environment:
-        PYPI_PASSWORD:
-            secure: iNYkwpBDR7Tpb075Zq2hjw==
+      PYPI_PASSWORD:
+          secure: iNYkwpBDR7Tpb075Zq2hjw==
 
   matrix:
     - PYTHON: C:\Python36-x64
