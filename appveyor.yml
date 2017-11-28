@@ -22,6 +22,7 @@ environment:
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
+      NPY_NUM_BUILD_JOBS: 4
       PYPI_PASSWORD:
           secure: iNYkwpBDR7Tpb075Zq2hjw==
 
@@ -114,24 +115,8 @@ build_script:
   - ps: cp "C:\Tools\vcpkg\installed\x64-windows\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
   - ps: cp "$env:CONDA_INSTALL_LOCN\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
-  # Build wheel using setup.py
-  - ps: |
-      $PYTHON_ARCH = $env:PYTHON_ARCH
-      If ($PYTHON_ARCH -eq 32) {
-          $MINGW = $env:MINGW_32 
-      } Else {
-          $MINGW = $env:MINGW_64
-      }
-      $env:Path += ";$MINGW"
-      $env:NPY_NUM_BUILD_JOBS = "4"
-
-      pip wheel -v -v -v .
-
-      # Upload artifact to Appveyor immediately after build
-      ls dist -r | Foreach-Object {
-          appveyor PushArtifact $_.FullName
-          pip install $_.FullName
-      }
+  # Build wheel
+  - pip wheel -v -v -v --wheel-dir=dist .
 
 on_success:
   - pip install twine
