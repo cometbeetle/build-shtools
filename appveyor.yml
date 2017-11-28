@@ -61,6 +61,7 @@ install:
   - ps: |
       cd C:\Tools\vcpkg
       git pull -q
+      .\bootstrap-vcpkg
       cd $env:APPVEYOR_BUILD_FOLDER
 
   # Add path, activate `conda` and update conda.
