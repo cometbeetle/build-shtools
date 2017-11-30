@@ -17,7 +17,7 @@ cache:
 environment: 
   global:
       NUMPY_HEAD: https://github.com/xoviat/numpy.git
-      NUMPY_BRANCH: flang
+      NUMPY_BRANCH: flang-combined
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
@@ -68,9 +68,6 @@ install:
   - cmd: conda config --add channels defaults
   - cmd: conda config --add channels conda-forge
   - cmd: conda install --yes flang openblas
-  
-  # Fix the OpenBLAS library name
-  - ps: cp $env:CONDA_INSTALL_LOCN\Library\lib\libopenblas.lib $env:CONDA_INSTALL_LOCN\Library\lib\openblas.lib
 
   # Install fftw3
   - vcpkg remove --outdated --recurse
