@@ -13,7 +13,6 @@ cache:
   - '%LOCALAPPDATA%\pip\Cache'
   - 'C:\Tools\vcpkg\installed'
   - 'C:\Tools\vcpkg\packages'
-  #- 'C:\Tools\vcpkg\buildtrees'
 
 environment: 
   global:
@@ -68,7 +67,7 @@ install:
   # Add our channels.
   - cmd: conda config --add channels defaults
   - cmd: conda config --add channels conda-forge
-  - cmd: conda install --yes flang mkl
+  - cmd: conda install --yes flang openblas
 
   # Install fftw3
   - vcpkg remove --outdated --recurse
