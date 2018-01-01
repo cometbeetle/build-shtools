@@ -16,12 +16,9 @@ cache:
 
 environment: 
   global:
-      NUMPY_HEAD: https://github.com/xoviat/numpy.git
-      NUMPY_BRANCH: flang-combined
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
-      NPY_NUM_BUILD_JOBS: 4
       PYPI_PASSWORD:
           secure: iNYkwpBDR7Tpb075Zq2hjw==
 
@@ -52,27 +49,17 @@ init:
 install:
   # Get needed submodules
   - git submodule update --init --recursive
-  
-  # Update vcpkg
-  - ps: |
-      cd C:\Tools\vcpkg
-      git pull -q
-      .\bootstrap-vcpkg
-      cd $env:APPVEYOR_BUILD_FOLDER
 
-  # Add path, activate `conda` and update conda.
+  # Add path and activate `conda`.
   - cmd: call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
-  - cmd: conda update --yes --quiet conda
   
   # Add our channels.
   - cmd: conda config --add channels defaults
   - cmd: conda config --add channels conda-forge
-  - cmd: conda install --yes flang openblas
 
-  # Install fftw3
-  - vcpkg remove --outdated --recurse
-  - vcpkg install fftw3:x64-windows
-  
+  # Install the required packages
+  - cmd: conda install --yes flang openblas fftw
+
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
@@ -85,21 +72,19 @@ install:
   - >-
      python -c "import sys,platform,struct;
      print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
-  
+
   # Upgrade to the latest pip.
   - python -m pip install -U pip setuptools wheel
   
+  # Install a version of NumPy that has the required version of distutils
+  # FIXME: Change this to "pip install numpy" when 1.15 is released
   # Install the released numpy
   - pip install numpy
-
-  # Replace numpy distutils with a version that can build with msvc + mingw-gfortran
   - ps: |
       $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
       rm -r -Force "$NumpyDir\distutils"
       $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
-      echo $env:NUMPY_HEAD
-      echo $env:NUMPY_BRANCH
-      git clone -q --depth=1 -b $env:NUMPY_BRANCH $env:NUMPY_HEAD $tmpdir
+      git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
       mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
