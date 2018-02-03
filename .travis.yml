@@ -48,6 +48,27 @@ matrix:
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.6
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - UNICODE_WIDTH=16
+        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.4
+        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.5
+        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - PLAT=i686
     - os: osx
       language: generic
       env:
@@ -69,10 +90,6 @@ matrix:
         - MB_PYTHON_VERSION=3.6
 
 before_install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                                     ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc || brew link --overwrite gcc   ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install openblas                           ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then travis_wait 30 brew install fftw --with-fortran ; fi
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP"
     - TEST_DEPENDS="$NP_TEST_DEP pytest pytest-xdist pytest-faulthandler pytest-env"
     - source multibuild/common_utils.sh

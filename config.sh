@@ -11,7 +11,10 @@ function build_fftw {
 
 function pre_build {
     if [ -n "$IS_OSX" ]; then
-        :
+        brew update
+        brew cask uninstall oclint                               
+        brew install gcc
+        brew install fftw --with-fortran
     else
         export CC="gcc -fPIC"
         build_openblas
