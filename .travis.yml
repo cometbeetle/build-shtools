@@ -12,7 +12,7 @@ env:
         # Following generated with
         # travis encrypt -r MacPython/scipy-wheels WHEELHOUSE_UPLOADER_SECRET=<the api key>
         - secure:
-            "KRvIrCgEd5j9lESFZvzBdksAFrtAGquMO8OK1HHw54aTwqWtQ4VW05gyZowxs2LzG2/Lt9Rhu+Iquznmc/aSmvqBDHB7miHXjs6rxikTeNypOPNTSvAuUdF/iub3gMHQlyN6Krm/vPMlOYjVRyK5erzcjItQLz3NMxzpDAPW8Ho8Vrq/A/YZbALmH3NI13x0f0VMs06TmgOb8PKJj8wty14bB3KmXqPGo2itTKMVPpVasTuQVTUnsFKKimng8+9Hom9To/bv1vENUsSJ4DWPvHPWqHnWJSC9T9AjCqJl4DztULJmz7IxhUWuD2pxOdYPIqHjEwHy55IERaR+VgZQWcxqtmN2qjzyQfq68Z/8uCFnOpyoIIZwXr9jCjIIOerXbbUZ5ny1T8FVDsrTqfb4yxjMBp04qy1VeYsG+kYsYwrhSBDeIzj33m1fkeMhsVo8il3dvaVe6/wLBIKyiQch4KeTJFUWaiw2HyvwDYJkV1+QkKkGIeogZ920GKYpaxYUshOVtt/k9bpiGYNqD1mKdgT4g0gTNUe/vhLhqJiKl+quHl76U9lW0VLUQ5EYhLL6oDhQ+XIncGkTGOclbWa44LXAb/xBIPvOOorrjtKx/4CvgSD3iO5b3TqDXtkLNGoZ28/u1F3GEhakckxStzMUBOVJrYONh33Eecnh3IFcbZU="
+            "U8Xa2+DU97lwpU2WJTEON215xwrYs0cpvcNLwfBhnb3Ck03WegmQCOVHxmZSiSjhgY4P73QhHxOUgv1KkHMc73BGP7Hywnj7aMTTtvTr0hCrQ32Su0Fak6JVgnEFXY+RD1fcBFYAMfYxAcVi/YrjT3c4ZUpDo9P2GhG8ZKiKWwhAGWIg4n3iFWOEm4pWUCI9zqj3kjeFbfDGfSdNqOllLFiJe1XvO2sAGaymUzmcMm/04H1oWBuNYy7eCnBbVm1BMaH7rHi82GsXYXlW2yn/x9dVj7edgPssgg40PiD2o0MaSk0wYwx5sFKz6uKMF0uzLZJZoeUJCDSbU8HrDrLRE1UHca5E/ClVeD21b7GS6tdllxrpompKYGWh19sra9OKUjIyeZUd4XUXO0qjLiwXzYa5UQKf/rTHz+3Bi9rU0dmXEDVsJf/kVjS9vf+JDsri0PAePkBw+aDz/FT0UGAmxhdr81JTsgQLxO8w3kDQLxune00v6yshmEnjEtH4TUzYnXH/hEBelLFOUPGGvoLtVU5DVvoomCGip1z7gcKgB8CTewwEnkfbhmvCEAQTgkDhR9D4AYTSCq38oXu2Y0dIxZv2kKZPEAOxtExsXaWWEtm1pj5BqU+/78DPZrmoBZrOZXtJ5h23JLUN9cEA6Y5VsR+SiGUZ8EjXiGWPtoz9uRE="
         # Commit when running from daily branch
         - DAILY_COMMIT=master
 
@@ -85,4 +85,4 @@ script:
 after_success:
     # Upload wheels to PYPI
     - pip install twine
-    - twine upload --skip-existing --user xoviat --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    - twine upload --skip-existing --user wieczor --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
