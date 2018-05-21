@@ -20,7 +20,7 @@ environment:
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
       PYPI_PASSWORD:
-          secure: iNYkwpBDR7Tpb075Zq2hjw==
+          secure: qzj1LjjInqPzpfidSH9qaMbftLIzD9s9kWQfSZWG5KQ=
 
   matrix:
     - PYTHON: C:\Python36-x64
@@ -99,4 +99,4 @@ build_script:
 
 on_success:
   - pip install twine
-  - twine upload --user xoviat --password %PYPI_PASSWORD% --skip-existing dist/*
+  - twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
