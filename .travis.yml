@@ -84,5 +84,7 @@ script:
 
 after_success:
     # Upload wheels to PYPI
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+         pip install --upgrade pyOpenSSL;
     - pip install twine
     - twine upload --skip-existing --username wieczor --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
