@@ -58,8 +58,7 @@ install:
   - cmd: conda config --add channels conda-forge
 
   # Install the required packages
-  - cmd: conda install --yes flang openblas
-  - cmd: conda install --yes -c eumetsat fftw
+  - cmd: conda install --yes flang openblas fftw
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
