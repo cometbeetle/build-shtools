@@ -20,6 +20,7 @@ function pre_build {
         build_openblas
         build_fftw
     fi
+    unset FFLAGS
 }
 
 function run_tests {
