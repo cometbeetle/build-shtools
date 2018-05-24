@@ -80,12 +80,6 @@ install:
   # FIXME: Change this to "pip install numpy" when 1.15 is released
   # Install the released numpy
   - pip install numpy
-  - ps: |
-      $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
-      rm -r -Force "$NumpyDir\distutils"
-      $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
-      git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
-      mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
   - ps: cd SHTOOLS
