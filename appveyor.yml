@@ -81,7 +81,7 @@ install:
   - git submodule update --init --recursive
 
   # Activate `conda`.
-  - cmd: call %CONDA_ROOT%\Scripts\activate.bat
+  - conda activate
   
   # Add our channels.
   - conda config --set always_yes yes --set changeps1 no
