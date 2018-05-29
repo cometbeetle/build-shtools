@@ -83,7 +83,8 @@ install:
   - conda info -a
 
   # Install the required packages
-  - conda install --no-deps flang openblas fftw
+  - conda install flang
+  - conda install --no-deps openblas fftw
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
