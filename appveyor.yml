@@ -85,7 +85,7 @@ install:
   # Install the required packages
   - conda install flang
   - conda install openblas
-  - conda install -c eumetsat fftw3
+  - conda install -c omnia fftw3f
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
