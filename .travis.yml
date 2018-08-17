@@ -81,6 +81,9 @@ before_install:
     - source multibuild/common_utils.sh
     - source multibuild/travis_steps.sh
     - before_install
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        sudo apt-get install pkg-config;
+      fi
 
 install:
     # Maybe get and clean and patch source
