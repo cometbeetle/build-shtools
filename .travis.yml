@@ -63,9 +63,6 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.5
-        # OSX build of scipy on Python 3.5 needs built 1.8.2 wheel to avoid
-        # https://github.com/numpy/numpy/issues/6204.  numpy 1.8.2 wheel for
-        # Python 3.5 at nipy manylinux URL.
     - os: osx
       language: generic
       env:
@@ -81,9 +78,6 @@ before_install:
     - source multibuild/common_utils.sh
     - source multibuild/travis_steps.sh
     - before_install
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        sudo apt-get install pkg-config;
-      fi
 
 install:
     # Maybe get and clean and patch source
