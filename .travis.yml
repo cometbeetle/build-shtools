@@ -81,6 +81,7 @@ before_install:
 
 install:
     # Maybe get and clean and patch source
+    - pip install pypandoc
     - build_wheel $REPO_DIR $PLAT
 
 script:
