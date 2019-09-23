@@ -92,4 +92,6 @@ after_success:
         pip install --upgrade pyOpenSSL;
       fi
     - pip install twine
-    - twine upload --skip-existing --username wieczor --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    #- twine upload --skip-existing --username wieczor --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    - twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username wieczor --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+
