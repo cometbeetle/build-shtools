@@ -2,7 +2,7 @@
 # Test for OSX with [ -n "$IS_OSX" ]
 
 # OpenBLAS version for systems that use it.
-OPENBLAS_VERSION=0.3.6
+OPENBLAS_VERSION=0.3.5
 
 function build_fftw {
     build_simple fftw 3.3.8 http://www.fftw.org
