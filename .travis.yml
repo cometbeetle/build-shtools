@@ -37,10 +37,6 @@ matrix:
         - MB_PYTHON_VERSION=2.7
     - os: linux
       env:
-        - MB_PYTHON_VERSION=2.7
-        - UNICODE_WIDTH=16
-    - os: linux
-      env:
         - MB_PYTHON_VERSION=3.4
     - os: linux
       env:
@@ -92,6 +88,6 @@ after_success:
         pip install --upgrade pyOpenSSL;
       fi
     - pip install twine
-    #- twine upload --skip-existing --username wieczor --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
-    - twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username wieczor --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    - twine upload --skip-existing --username wieczor --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    #- twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username wieczor --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
 

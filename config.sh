@@ -12,7 +12,6 @@ function build_fftw {
 function pre_build {
     if [ -n "$IS_OSX" ]; then
         brew update
-        # brew cask uninstall oclint || true
         brew install gcc
         brew install fftw
     else
