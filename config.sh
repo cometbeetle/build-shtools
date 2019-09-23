@@ -19,6 +19,7 @@ function pre_build {
         export CC="gcc -fPIC"
         build_openblas
         build_fftw
+        pip install pypandoc
     fi
     unset FFLAGS
 }
