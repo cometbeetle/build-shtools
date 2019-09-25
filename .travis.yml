@@ -21,7 +21,6 @@ branches:
   - master
 
 language: python
-# Default Python version is usually 2.7
 python: 3.5
 sudo: required
 dist: trusty
@@ -34,12 +33,6 @@ matrix:
   include:
     - os: linux
       env:
-        - MB_PYTHON_VERSION=2.7
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.4
-    - os: linux
-      env:
         - MB_PYTHON_VERSION=3.5
     - os: linux
       env:
@@ -47,14 +40,9 @@ matrix:
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.7
-    - os: osx
-      language: generic
+    - os: linux
       env:
-        - MB_PYTHON_VERSION=2.7
-    - os: osx
-      language: generic
-      env:
-        - MB_PYTHON_VERSION=3.4
+        - MB_PYTHON_VERSION=3.8
     - os: osx
       language: generic
       env:
@@ -67,6 +55,10 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.7
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=3.8
 
 before_install:
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP"
