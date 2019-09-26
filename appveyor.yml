@@ -89,6 +89,7 @@ install:
   - echo %APPVEYOR_BUILD_FOLDER%
   - ps: ls
   - ps: mkdir fftw
+  - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   - set PATH=%APPVEYOR_BUILD_FOLDER%\fftw;%PATH%
   - echo %PATH%
   #- set PATH=.;%PATH%
@@ -134,7 +135,7 @@ install:
       mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
-  - ps: cd SHTOOLS
+  - ps: cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
 
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
