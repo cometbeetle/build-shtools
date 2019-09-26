@@ -84,7 +84,8 @@ install:
   # Install FFTW v3.3.5
   - echo Installing FFTW
   - ps: mkdir fftw
-  - ps: cd fftw
+  #- ps: cd fftw
+  - ps pushd fftw
   - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   - set PATH=%APPVEYOR_BUILD_FOLDER%\fftw;%PATH%
   # This downloads the windows 64-bit pre-compiled dlls
@@ -95,7 +96,7 @@ install:
   - ps: lib /machine:x64 /def:libfftw3f-3.def
   - ps: lib /machine:x64 /def:libfftw3l-3.def
   - ps: ls
-  - ps: cd ..
+  #- ps: cd ..
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
