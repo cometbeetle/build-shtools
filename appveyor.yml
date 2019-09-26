@@ -16,31 +16,22 @@ cache:
 
 environment:
   global:
+      FFTW_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\fftw"
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       PYPI_PASSWORD:
           secure: qzj1LjjInqPzpfidSH9qaMbftLIzD9s9kWQfSZWG5KQ=
+      PYPITEST_PASSWORD:
+          secure: AC+ebBizFsGGHleha9J4+u21eadTMZ9cCwUzlbCYHdw=
 
   matrix:
-    - PYTHON: C:\Python35
-      PYTHON_VERSION: "3.5"
-      PYTHON_ARCH: "32"
-
     - PYTHON: C:\Python35-x64
       PYTHON_VERSION: "3.5"
       PYTHON_ARCH: "64"
 
-    - PYTHON: C:\Python36
-      PYTHON_VERSION: "3.6"
-      PYTHON_ARCH: "32"
-
     - PYTHON: C:\Python36-x64
       PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
-
-    - PYTHON: C:\Python37
-      PYTHON_VERSION: "3.7"
-      PYTHON_ARCH: "32"
 
     - PYTHON: C:\Python37-x64
       PYTHON_VERSION: "3.7"
@@ -77,6 +68,7 @@ install:
   - "%CONDA_ROOT%\\Scripts\\activate.bat"
   
   # Add our channels.
+  #- conda update -n base conda
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels defaults
   - conda config --add channels conda-forge
@@ -86,7 +78,19 @@ install:
   # Install the required packages
   - conda install flang
   - conda install openblas
-  - conda install fftw
+  #- conda install fftw
+  
+  # Install FFTW
+  - echo Installing FFTW
+  - ps: mkdir $env:FFTW_ROOT
+  - ps: pushd $env:FFTW_ROOT
+  # This downloads the windows 64-bit pre-compiled dlls
+  - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.4-dll64.zip -OutFile fftw-3.3.4-dll64.zip
+  - ps: 7z x fftw-3.3.4-dll64.zip
+  #  - ps: pushd fftw-3.3.4-dll64
+  - ps: lib /machine:x64 /def:libfftw3-3.def
+  - ps: lib /machine:x64 /def:libfftw3f-3.def
+  - ps: lib /machine:x64 /def:libfftw3l-3.def
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -103,9 +107,7 @@ install:
 
   # Upgrade to the latest pip.
   - python -m pip install -U pip setuptools wheel
-  
-  # Install a version of NumPy that has the required version of distutils
-  # FIXME: Change this to "pip install numpy" when 1.15 is released
+
   # Install the released numpy
   - pip install numpy
   - ps: |

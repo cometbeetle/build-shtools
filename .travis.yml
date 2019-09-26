@@ -40,9 +40,6 @@ matrix:
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.7
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.8
     - os: osx
       language: generic
       env:
@@ -55,10 +52,6 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.7
-    - os: osx
-      language: generic
-      env:
-        - MB_PYTHON_VERSION=3.8
 
 before_install:
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP"
