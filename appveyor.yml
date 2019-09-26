@@ -83,13 +83,14 @@ install:
   #- conda install fftw # setup.py can't find the library
   
   # Install FFTW v3.3.5
+  # set FFTW=value
   - echo Installing FFTW
-  - ps: pwd
+  - echo %CD%
   - echo %APPVEYOR_BUILD_FOLDER%
   - ps: ls
   - ps: mkdir fftw
-  - ps: set PATH=pwd;%PATH%
-  #- echo %PATH%
+  - set PATH=%APPVEYOR_BUILD_FOLDER%\fftw;%PATH%
+  - echo %PATH%
   #- set PATH=.;%PATH%
   #- echo %PATH%
   #- ps: mkdir $env:FFTW_ROOT
