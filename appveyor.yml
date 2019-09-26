@@ -70,7 +70,6 @@ install:
   # Add our channels.
   #- conda update -n base conda
   - conda config --set always_yes yes --set changeps1 no
-  - conda config --add channels defaults
   - conda config --add channels conda-forge
   - conda update -q conda
   - conda info -a
@@ -85,12 +84,12 @@ install:
   - ps: mkdir $env:FFTW_ROOT
   - ps: pushd $env:FFTW_ROOT
   # This downloads the windows 64-bit pre-compiled dlls
-  - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.4-dll64.zip -OutFile fftw-3.3.4-dll64.zip
-  - ps: 7z x fftw-3.3.4-dll64.zip
-  #  - ps: pushd fftw-3.3.4-dll64
-  - ps: lib /machine:x64 /def:libfftw3-3.def
-  - ps: lib /machine:x64 /def:libfftw3f-3.def
-  - ps: lib /machine:x64 /def:libfftw3l-3.def
+  - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.8-dll64.zip -OutFile fftw-3.3.8-dll64.zip
+  - ps: 7z x fftw-3.3.8-dll64.zip
+  #  - ps: pushd fftw-3.3.8-dll64
+  - lib /machine:x64 /def:libfftw3-3.def
+  - lib /machine:x64 /def:libfftw3f-3.def
+  - lib /machine:x64 /def:libfftw3l-3.def
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
