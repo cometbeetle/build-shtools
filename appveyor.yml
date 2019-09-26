@@ -80,13 +80,15 @@ install:
   - conda install flang
   - conda install openblas
   - conda install lapack
+  - ps: ls c:\\python35-x64\\lib
+  - ps: ls c:\\python35-x64\\libs
   #- conda install fftw # setup.py can't find the library
   
   # Install FFTW v3.3.5 - Need to rename files "3-3." to "3."
   - echo Installing FFTW
   - ps: mkdir fftw
   - ps: cd fftw
-  - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
+  #- set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   #- set PATH=%APPVEYOR_BUILD_FOLDER%\fftw;%PATH%
   # This downloads the windows 64-bit pre-compiled dlls
   - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip -OutFile fftw-3.3.5-dll64.zip
