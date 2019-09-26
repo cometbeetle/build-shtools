@@ -108,6 +108,7 @@ install:
   - echo Installing LAPACK and BLAS
   - ps: mkdir lapack
   - set LAPACK=%APPVEYOR_BUILD_FOLDER%\lapack
+  - set BLAS=%APPVEYOR_BUILD_FOLDER%\lapack
   - ps: cd lapack
   - ps: wget $env:LAPACK_URL -OutFile LAPACK.lib
   - ps: wget $env:BLAS_URL -OutFile BLAS.lib
