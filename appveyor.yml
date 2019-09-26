@@ -68,10 +68,8 @@ install:
   - "%CONDA_ROOT%\\Scripts\\activate.bat"
   
   # Add our channels.
-  #- conda update -n base conda
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels conda-forge
-  - conda update -n base defaults::conda
   - conda update -q conda
   - conda info -a
 
