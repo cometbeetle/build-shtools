@@ -85,6 +85,9 @@ install:
   # Install FFTW v3.3.5
   - echo Installing FFTW
   - ps: pwd
+  - echo %PATH%
+  - set PATH=.;%PATH%
+  - echo %PATH%
   #- ps: mkdir $env:FFTW_ROOT
   #- ps: pushd $env:FFTW_ROOT
   # This downloads the windows 64-bit pre-compiled dlls
@@ -94,6 +97,7 @@ install:
   - ps: lib /machine:x64 /def:libfftw3-3.def
   - ps: lib /machine:x64 /def:libfftw3f-3.def
   - ps: lib /machine:x64 /def:libfftw3l-3.def
+  - ps: ls
   #- ps: popd
   #- ps: cd ..
   #- ps: cd %APPVEYOR_BUILD_FOLDER%
