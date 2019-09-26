@@ -19,7 +19,6 @@ platform:
 
 environment:
   global:
-      FFTW_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\fftw"
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       PYPI_PASSWORD:
@@ -83,20 +82,11 @@ install:
   #- conda install fftw # setup.py can't find the library
   
   # Install FFTW v3.3.5
-  # set FFTW=value
   - echo Installing FFTW
-  - echo %CD%
-  - echo %APPVEYOR_BUILD_FOLDER%
-  - ps: ls
   - ps: mkdir fftw
   - ps: cd fftw
   - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   - set PATH=%APPVEYOR_BUILD_FOLDER%\fftw;%PATH%
-  - echo %PATH%
-  #- set PATH=.;%PATH%
-  #- echo %PATH%
-  #- ps: mkdir $env:FFTW_ROOT
-  #- ps: pushd $env:FFTW_ROOT
   # This downloads the windows 64-bit pre-compiled dlls
   - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip -OutFile fftw-3.3.5-dll64.zip
   - ps: 7z x fftw-3.3.5-dll64.zip
@@ -106,9 +96,6 @@ install:
   - ps: lib /machine:x64 /def:libfftw3l-3.def
   - ps: ls
   - ps: cd ..
-  #- ps: popd
-  #- ps: cd ..
-  #- ps: cd %APPVEYOR_BUILD_FOLDER%
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -136,7 +123,7 @@ install:
       mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
-  - ps: cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
+  - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
 
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
