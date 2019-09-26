@@ -18,6 +18,9 @@ platform:
   - x64
 
 environment:
+  LAPACK_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/LAPACK.lib
+  BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/BLAS.lib
+
   global:
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
@@ -77,12 +80,10 @@ install:
   - conda info -a
 
   # Install the required packages
+  - ps: ls C:\
   - conda install flang
-  - conda install openblas
-  - conda install lapack
-  - ps: ls c:\\python35-x64\\lib\\site-packages
-  - ps: ls c:\\python35-x64\\lib\\site-packages\\lapack
-  - ps: ls c:\\python35-x64\\lib\\site-packages\\openblas
+  #- conda install openblas
+  #- conda install lapack
   #- conda install fftw # setup.py can't find the library
   
   # Install FFTW v3.3.5 - Need to rename files "3-3." to "3."
@@ -103,6 +104,15 @@ install:
   - ps: lib /machine:x64 /def:libfftw3.def
   - ps: lib /machine:x64 /def:libfftw3f.def
   - ps: lib /machine:x64 /def:libfftw3l.def
+  - ps: cd ..
+
+  # Install LAPACK and BLAS
+  - echo Installing LAPACK and BLAS
+  - ps: mkdir lapack
+  - ps: cd lapack
+  - ps: wget $env:LAPACK_URL
+  - ps: wget $env:BLAS_URL
+  - ps: ls
   - ps: cd ..
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
