@@ -80,7 +80,6 @@ install:
   - conda info -a
 
   # Install the required packages
-  - ps: ls C:\
   - conda install flang
   #- conda install openblas
   #- conda install lapack
@@ -90,8 +89,7 @@ install:
   - echo Installing FFTW
   - ps: mkdir fftw
   - ps: cd fftw
-  #- set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
-  #- set PATH=%APPVEYOR_BUILD_FOLDER%\fftw;%PATH%
+  - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   # This downloads the windows 64-bit pre-compiled dlls
   - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip -OutFile fftw-3.3.5-dll64.zip
   - ps: 7z x fftw-3.3.5-dll64.zip
@@ -110,8 +108,8 @@ install:
   - echo Installing LAPACK and BLAS
   - ps: mkdir lapack
   - ps: cd lapack
-  - ps: wget http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/LAPACK.lib -OutFile LAPACK.lib
-  - ps: wget $env:BLAS_URL -OutFile BLAS.LIB
+  - ps: wget $env:LAPACK_URL -OutFile LAPACK.lib
+  - ps: wget $env:BLAS_URL -OutFile BLAS.lib
   - ps: ls
   - ps: cd ..
 
