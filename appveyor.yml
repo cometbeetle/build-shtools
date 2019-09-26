@@ -89,6 +89,7 @@ install:
   - echo %APPVEYOR_BUILD_FOLDER%
   - ps: ls
   - ps: mkdir fftw
+  - ps: cd fftw
   - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   - set PATH=%APPVEYOR_BUILD_FOLDER%\fftw;%PATH%
   - echo %PATH%
