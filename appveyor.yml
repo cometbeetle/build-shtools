@@ -93,10 +93,13 @@ install:
   - move libfftw3-3.dll libfftw3.dll
   - move libfftw3f-3.dll libfftw3f.dll
   - move libfftw3l-3.dll libfftw3l.dll
+  - move libfftw3-3.def libfftw3.def
+  - move libfftw3f-3.def libfftw3f.def
+  - move libfftw3l-3.def libfftw3l.def
   - ps: ls
-  - ps: lib /machine:x64 /def:libfftw3-3.def
-  - ps: lib /machine:x64 /def:libfftw3f-3.def
-  - ps: lib /machine:x64 /def:libfftw3l-3.def
+  - ps: lib /machine:x64 /def:libfftw3.def
+  - ps: lib /machine:x64 /def:libfftw3f.def
+  - ps: lib /machine:x64 /def:libfftw3l.def
   - ps: ls
   - ps: cd ..
 
