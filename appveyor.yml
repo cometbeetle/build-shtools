@@ -14,6 +14,9 @@ cache:
   - 'C:\Tools\vcpkg\installed'
   - 'C:\Tools\vcpkg\packages'
 
+platform:
+  - x64
+
 environment:
   global:
       FFTW_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\fftw"
@@ -51,6 +54,7 @@ init:
           Write-Host "There are newer queued builds for this pull request, skipping build."
           Exit-AppveyorBuild
         }
+  - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install:
   - if "%PYTHON_VERSION%" == "3.5" set "BASE_PYTHON_VERSION=35"
@@ -76,9 +80,9 @@ install:
   # Install the required packages
   - conda install flang
   - conda install openblas
-  #- conda install fftw
+  #- conda install fftw # setup.py can't find the library
   
-  # Install FFTW
+  # Install FFTW v3.3.5
   - echo Installing FFTW
   - ps: mkdir $env:FFTW_ROOT
   - ps: pushd $env:FFTW_ROOT
@@ -86,9 +90,9 @@ install:
   - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip -OutFile fftw-3.3.5-dll64.zip
   - ps: 7z x fftw-3.3.5-dll64.zip
   #  - ps: pushd fftw-3.3.5-dll64
-  - lib /machine:x64 /def:libfftw3-3.def
-  - lib /machine:x64 /def:libfftw3f-3.def
-  - lib /machine:x64 /def:libfftw3l-3.def
+  - ps: lib /machine:x64 /def:libfftw3-3.def
+  - ps: lib /machine:x64 /def:libfftw3f-3.def
+  - ps: lib /machine:x64 /def:libfftw3l-3.def
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
