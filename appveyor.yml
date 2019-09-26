@@ -146,6 +146,7 @@ build_script:
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
   - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
+  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
