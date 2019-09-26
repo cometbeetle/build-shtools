@@ -85,7 +85,7 @@ install:
   # Install FFTW v3.3.5
   - echo Installing FFTW
   - ps: mkdir $env:FFTW_ROOT
-    ps - "set PATH=$env:FFTW_ROOT;%PATH%"
+  - ps: - "set PATH=$env:FFTW_ROOT;%PATH%"
   #- ps: cd $env:FFTW_ROOT
   - ps: pushd $env:FFTW_ROOT
   # This downloads the windows 64-bit pre-compiled dlls
