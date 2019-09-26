@@ -93,6 +93,7 @@ install:
   - ps: lib /machine:x64 /def:libfftw3-3.def
   - ps: lib /machine:x64 /def:libfftw3f-3.def
   - ps: lib /machine:x64 /def:libfftw3l-3.def
+  - ps: cd %APPVEYOR_BUILD_FOLDER%
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
