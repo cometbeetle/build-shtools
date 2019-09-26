@@ -80,8 +80,9 @@ install:
   - conda install flang
   - conda install openblas
   - conda install lapack
-  - ps: ls c:\\python35-x64\\lib
-  - ps: ls c:\\python35-x64\\libs
+  - ps: ls c:\\python35-x64\\lib\\site-packages
+  - ps: ls c:\\python35-x64\\lib\\site-packages\\lapack
+  - ps: ls c:\\python35-x64\\lib\\site-packages\\openblas
   #- conda install fftw # setup.py can't find the library
   
   # Install FFTW v3.3.5 - Need to rename files "3-3." to "3."
