@@ -58,7 +58,7 @@ init:
           Exit-AppveyorBuild
         }
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-  - python -c 'import sys; print(sys.platform)'
+  - ps: python -c "import sys; print(sys.platform)"
 
 install:
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
