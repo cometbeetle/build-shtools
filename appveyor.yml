@@ -149,10 +149,10 @@ build_script:
   - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
   # Trying to move fftw files so that they are found by linker
-  - ps: md -Force .\build\temp.win-amd64-$env:PYTHON_VERSION
-  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.dll" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
-  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.h" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
-  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.lib" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
+  #- ps: md -Force .\build\temp.win-amd64-$env:PYTHON_VERSION
+  #- ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.dll" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
+  #- ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.h" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
+  #- ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.lib" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
