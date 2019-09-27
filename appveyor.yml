@@ -140,6 +140,7 @@ install:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
+  - git checkout develop
 
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
