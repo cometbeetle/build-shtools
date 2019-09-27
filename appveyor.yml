@@ -152,9 +152,11 @@ build_script:
   - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.lib" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
 
   - ps: python -c "import sys; print(sys.platform)"
-  - ps: ls 'build\\temp.win-amd64-$env:PYTHON_VERSION'
   - ps: ls 'C:\\projects\\build-shtools\\fftw'
   - ps: ls 'C:\\projects\\build-shtools\\lapack'
+  - ps: ls '.\build\temp.win-amd64-$env:PYTHON_VERSION'
+  - ps: ls 'build\temp.win-amd64-$env:PYTHON_VERSION'
+  - ps: ls 'build\\temp.win-amd64-$env:PYTHON_VERSION'
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
