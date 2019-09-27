@@ -19,11 +19,15 @@ platform:
 
 environment:
   # LAPACK_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/LAPACK.lib
-  LAPACK_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.dll
+  LAPACK_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.lib
+  LAPACK_URL_DLL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.dll
   LAPACK_LIB: lapack.lib
+  LAPACK_DLL: lapack.dll
   # BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/BLAS.lib
-  BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.dll
+  BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.lib
+  BLAS_URL_DLL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.dll
   BLAS_LIB: blas.lib
+  BLASS_DLL: blas.dll
   FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
   FFTW_ZIP: fftw-3.3.5-dll64.zip
 
@@ -116,6 +120,8 @@ install:
   - ps: cd lapack
   - ps: wget $env:LAPACK_URL -OutFile $env:LAPACK_LIB
   - ps: wget $env:BLAS_URL -OutFile $env:BLAS_LIB
+  - ps: wget $env:LAPACK_URL_DLL -OutFile $env:LAPACK_DLL
+  - ps: wget $env:BLAS_URL_DLL -OutFile $env:BLAS_DLL
   # - dumpbin /SYMBOLS lapack.lib
   - ps: cd ..
 
