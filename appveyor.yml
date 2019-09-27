@@ -29,7 +29,7 @@ environment:
   BLAS_LIB: blas.lib
   BLAS_DLL: blas.dll
   FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
-  FFTW_ZIP: fftw-3.3.5-dll64.zip
+  FFTW_ZIP: fftw-3.3.5-dll32.zip
 
   global:
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
