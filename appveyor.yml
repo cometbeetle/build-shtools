@@ -58,7 +58,6 @@ init:
           Exit-AppveyorBuild
         }
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-  - ps: python -c "import sys; print(sys.platform)"
 
 install:
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
@@ -97,9 +96,9 @@ install:
   - move libfftw3-3.def libfftw3.def
   - move libfftw3f-3.def libfftw3f.def
   - move libfftw3l-3.def libfftw3l.def
-  - lib /machine:x64 /def:libfftw3.def
-  - lib /machine:x64 /def:libfftw3f.def
-  - lib /machine:x64 /def:libfftw3l.def
+  - ps: lib /machine:x64 /def:libfftw3.def
+  - ps: lib /machine:x64 /def:libfftw3f.def
+  - ps: lib /machine:x64 /def:libfftw3l.def
   - ps: cd ..
 
   # Install LAPACK and BLAS
@@ -141,6 +140,10 @@ install:
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
   - git checkout develop
+  - ps: python -c "import sys; print(sys.platform)"
+  - ps: ls 'build\\temp.win-amd64-$env:PYTHON_VERSION'
+  - ps: ls 'C:\\projects\\build-shtools\\fftw'
+  - ps: ls 'C:\\projects\\build-shtools\\lapack'
 
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
