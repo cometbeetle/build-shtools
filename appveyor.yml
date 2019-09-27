@@ -24,10 +24,10 @@ environment:
   LAPACK_LIB: lapack.lib
   LAPACK_DLL: lapack.dll
   # BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/BLAS.lib
-  BLAS__LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/libblas.lib
+  BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/libblas.lib
   BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/libblas.dll
   BLAS_LIB: blas.lib
-  BLASS_DLL: blas.dll
+  BLAS_DLL: blas.dll
   FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
   FFTW_ZIP: fftw-3.3.5-dll64.zip
 
