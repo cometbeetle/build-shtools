@@ -64,17 +64,24 @@ init:
           Exit-AppveyorBuild
         }
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+  - set PATH=C:\MinGW\bin;%PATH%
+
 
 install:
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
   - if "%PYTHON_VERSION%" == "3.7" set "BASE_PYTHON_VERSION=37"
   - if "%PYTHON_VERSION%" == "3.8" set "BASE_PYTHON_VERSION=38"
   - if "%PYTHON_ARCH%" == "64" set "ARCH_LABEL=-x64"
+
+  # Get needed submodules
+  - git submodule update --init --recursive
+
+  # Install mingw gfortran
+  - mingw-get install gcc gfortran
+
   # These are already installed on appveyor.  Update them.
   #- set CONDA_ROOT=C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%
   #- "ECHO %CONDA_ROOT%"
-  # Get needed submodules
-  - git submodule update --init --recursive
 
   # Activate `conda`.
   #- "%CONDA_ROOT%\\Scripts\\activate.bat"
@@ -87,7 +94,6 @@ install:
 
   # Install the required packages
   # - conda install flang
-  - mingw-get install gcc gfortran
 
   # Install FFTW v3.3.5
   # Need to rename files "3-3" to just "3" as well as rename
