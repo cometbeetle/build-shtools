@@ -77,23 +77,23 @@ install:
   - git submodule update --init --recursive
 
   # Install mingw gfortran
-  - mingw-get install gcc gfortran
+  #- mingw-get install gfortran
 
   # These are already installed on appveyor.  Update them.
-  #- set CONDA_ROOT=C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%
-  #- "ECHO %CONDA_ROOT%"
+  - set CONDA_ROOT=C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%
+  - "ECHO %CONDA_ROOT%"
 
   # Activate `conda`.
-  #- "%CONDA_ROOT%\\Scripts\\activate.bat"
+  - "%CONDA_ROOT%\\Scripts\\activate.bat"
 
   # Add our channels.
-  #- conda config --set always_yes yes --set changeps1 no
-  #- conda config --add channels conda-forge
-  #- conda update -q conda
-  #- conda info -a
+  - conda config --set always_yes yes --set changeps1 no
+  - conda config --add channels conda-forge
+  - conda update -q conda
+  - conda info -a
 
   # Install the required packages
-  # - conda install flang
+   - conda install flang
 
   # Install FFTW v3.3.5
   # Need to rename files "3-3" to just "3" as well as rename
@@ -139,7 +139,7 @@ install:
 
   # Check that we have the expected version and architecture for Python
   - python --version
-  # - flang --version
+  - flang --version
 
   - >-
      python -c "import sys,platform,struct;
@@ -150,20 +150,14 @@ install:
 
   # Install the released numpy
   - pip install numpy
-  #- ps: |
-  #    $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
-  #    rm -r -Force "$NumpyDir\distutils"
-  #    $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
-  #    git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
-  #    mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
   - git checkout test
 
   # Copy dependent DLLs
-  #- ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
-  #- ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
+  - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
+  - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
