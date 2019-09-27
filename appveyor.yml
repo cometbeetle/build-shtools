@@ -65,7 +65,7 @@ init:
         }
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
   - ps: ls C:\MinGW\bin
-  - ps: ls C:\MinGW\mingw32
+  - ps: ls C:\MinGW\mingw32\bin
 
 install:
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
@@ -89,6 +89,7 @@ install:
 
   # Install the required packages
   # - conda install flang
+  - mingw-get install gcc gfortran
 
   # Install FFTW v3.3.5
   # Need to rename files "3-3" to just "3" as well as rename
