@@ -18,9 +18,9 @@ platform:
   - x64
 
 environment:
-  LAPACK_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/LAPACK.lib
+  LAPACK_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/LAPACK.lib
   LAPACK_LIB: lapack.lib
-  BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/BLAS.lib
+  BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/BLAS.lib
   BLAS_LIB: blas.lib
   FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
   FFTW_ZIP: fftw-3.3.5-dll64.zip
