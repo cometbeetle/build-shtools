@@ -19,7 +19,10 @@ platform:
 
 environment:
   LAPACK_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/LAPACK.lib
+  LAPACK_LIB: LAPACK.lib
   BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/BLAS.lib
+  BLAS_LIB: BLAS.lib
+  FFTW_ZIP: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
 
   global:
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
@@ -54,9 +57,9 @@ init:
           Exit-AppveyorBuild
         }
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+  - ps: ls C:\"Program Files (x86)"
 
 install:
-  - if "%PYTHON_VERSION%" == "3.5" set "BASE_PYTHON_VERSION=35"
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
   - if "%PYTHON_VERSION%" == "3.7" set "BASE_PYTHON_VERSION=37"
   - if "%PYTHON_VERSION%" == "3.8" set "BASE_PYTHON_VERSION=38"
@@ -69,7 +72,7 @@ install:
 
   # Activate `conda`.
   - "%CONDA_ROOT%\\Scripts\\activate.bat"
-  
+
   # Add our channels.
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels conda-forge
@@ -78,27 +81,24 @@ install:
 
   # Install the required packages
   - conda install flang
-  #- conda install openblas
-  #- conda install lapack
-  #- conda install fftw # setup.py can't find the library
-  
-  # Install FFTW v3.3.5 - Need to rename files "3-3." to "3."
+
+  # Install FFTW v3.3.5 - Need to rename files "3-3" to just "3"
   - echo Installing FFTW
   - ps: mkdir fftw
   - ps: cd fftw
   - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   # This downloads the windows 64-bit pre-compiled dlls
-  - ps: wget ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip -OutFile fftw-3.3.5-dll64.zip
-  - ps: 7z x fftw-3.3.5-dll64.zip
+  - ps: wget $env:FFTW_URL -OutFile $env:FFTW_ZIP
+  - ps: 7z x $env:FFTW_ZIP
   - move libfftw3-3.dll libfftw3.dll
   - move libfftw3f-3.dll libfftw3f.dll
   - move libfftw3l-3.dll libfftw3l.dll
   - move libfftw3-3.def libfftw3.def
   - move libfftw3f-3.def libfftw3f.def
   - move libfftw3l-3.def libfftw3l.def
-  - ps: lib /machine:x64 /def:libfftw3.def
-  - ps: lib /machine:x64 /def:libfftw3f.def
-  - ps: lib /machine:x64 /def:libfftw3l.def
+  - lib /machine:x64 /def:libfftw3.def
+  - lib /machine:x64 /def:libfftw3f.def
+  - lib /machine:x64 /def:libfftw3l.def
   - ps: cd ..
 
   # Install LAPACK and BLAS
@@ -107,8 +107,8 @@ install:
   - set LAPACK=%APPVEYOR_BUILD_FOLDER%\lapack
   - set BLAS=%APPVEYOR_BUILD_FOLDER%\lapack
   - ps: cd lapack
-  - ps: wget $env:LAPACK_URL -OutFile LAPACK.lib
-  - ps: wget $env:BLAS_URL -OutFile BLAS.lib
+  - ps: wget $env:LAPACK_URL -OutFile $env:LAPACK_LIB
+  - ps: wget $env:BLAS_URL -OutFile $env:BLAS_LIB
   - ps: ls
   - ps: cd ..
 
@@ -130,12 +130,12 @@ install:
 
   # Install the released numpy
   - pip install numpy
-  - ps: |
-      $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
-      rm -r -Force "$NumpyDir\distutils"
-      $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
-      git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
-      mv $tmpdir\numpy\distutils $NumpyDir
+  #- ps: |
+  #    $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
+  #    rm -r -Force "$NumpyDir\distutils"
+  #    $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
+  #    git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
+  #    mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
