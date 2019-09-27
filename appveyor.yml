@@ -66,7 +66,7 @@ init:
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
   - ps: ls C:\MinGW\bin
   - ps: ls C:\MinGW\mingw32\bin
-  - echo %PATH%
+  - set PATH=C:\MinGW;%PATH%
 
 install:
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
@@ -168,4 +168,4 @@ build_script:
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  #- twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
