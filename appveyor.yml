@@ -19,13 +19,13 @@ platform:
 
 environment:
   # LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/LAPACK.lib
-  LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/liblapack.lib
-  LAPACK_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/liblapack.dll
+  LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.lib
+  LAPACK_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.dll
   LAPACK_LIB: lapack.lib
   LAPACK_DLL: lapack.dll
   # BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/BLAS.lib
-  BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/libblas.lib
-  BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/libblas.dll
+  BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.lib
+  BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.dll
   BLAS_LIB: blas.lib
   BLAS_DLL: blas.dll
   FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
@@ -64,10 +64,6 @@ init:
           Exit-AppveyorBuild
         }
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-  - ps: ls C:\MinGW\bin
-  - ps: ls C:\MinGW\mingw32\bin
-  - set PATH=C:\MinGW\bin;%PATH%
-  - echo %PATH%
 
 install:
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
@@ -75,19 +71,19 @@ install:
   - if "%PYTHON_VERSION%" == "3.8" set "BASE_PYTHON_VERSION=38"
   - if "%PYTHON_ARCH%" == "64" set "ARCH_LABEL=-x64"
   # These are already installed on appveyor.  Update them.
-  - set CONDA_ROOT=C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%
-  - "ECHO %CONDA_ROOT%"
+  #- set CONDA_ROOT=C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%
+  #- "ECHO %CONDA_ROOT%"
   # Get needed submodules
   - git submodule update --init --recursive
 
   # Activate `conda`.
-  - "%CONDA_ROOT%\\Scripts\\activate.bat"
+  #- "%CONDA_ROOT%\\Scripts\\activate.bat"
 
   # Add our channels.
-  - conda config --set always_yes yes --set changeps1 no
-  - conda config --add channels conda-forge
-  - conda update -q conda
-  - conda info -a
+  #- conda config --set always_yes yes --set changeps1 no
+  #- conda config --add channels conda-forge
+  #- conda update -q conda
+  #- conda info -a
 
   # Install the required packages
   # - conda install flang
@@ -160,8 +156,8 @@ build_script:
   - git checkout test
 
   # Copy dependent DLLs
-  - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
-  - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
+  #- ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
+  #- ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
