@@ -64,6 +64,7 @@ init:
           Exit-AppveyorBuild
         }
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+  - ps: ls
 
 install:
   - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
@@ -120,7 +121,7 @@ install:
   - ps: cd lapack
   - ps: wget $env:LAPACK_LIB_URL -OutFile $env:LAPACK_LIB
   - ps: wget $env:BLAS_LIB_URL -OutFile $env:BLAS_LIB
-  - ps: wget $env:LAPACK__DLL_URL -OutFile $env:LAPACK_DLL
+  - ps: wget $env:LAPACK_DLL_URL -OutFile $env:LAPACK_DLL
   - ps: wget $env:BLAS_DLL_URL -OutFile $env:BLAS_DLL
   # - dumpbin /SYMBOLS lapack.lib
   - ps: cd ..
