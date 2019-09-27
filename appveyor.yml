@@ -159,7 +159,7 @@ build_script:
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
   - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
-  -ps: pip install -v -e .
+  pip install -v -e .
   -ps: ls pyshtools
 
   # Build wheel
