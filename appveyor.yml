@@ -22,7 +22,8 @@ environment:
   LAPACK_LIB: LAPACK.lib
   BLAS_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win64/BLAS.lib
   BLAS_LIB: BLAS.lib
-  FFTW_ZIP: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
+  FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
+  FFTW_ZIP: fftw-3.3.5-dll64.zip
 
   global:
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
@@ -143,9 +144,12 @@ build_script:
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
   - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
-  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
-  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.h" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
-  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.lib" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
+
+  # Trying to move fftw files so that they are found by linker
+  - ps: md -Force .\build\temp.win-amd64-$env:PYTHON_VERSION
+  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.dll" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
+  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.h" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
+  - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.lib" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
