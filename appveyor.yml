@@ -114,7 +114,7 @@ install:
   - ps: cd lapack
   - ps: wget $env:LAPACK_URL -OutFile $env:LAPACK_LIB
   - ps: wget $env:BLAS_URL -OutFile $env:BLAS_LIB
-  - dumpbin lapack.lib
+  - dumpbin /SYMBOLS lapack.lib
   - ps: ls
   - ps: cd ..
 
