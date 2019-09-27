@@ -114,7 +114,7 @@ install:
   - ps: cd lapack
   - ps: wget $env:LAPACK_URL -OutFile $env:LAPACK_LIB
   - ps: wget $env:BLAS_URL -OutFile $env:BLAS_LIB
-  - dumpbin /SYMBOLS lapack.lib
+  # - dumpbin /SYMBOLS lapack.lib
   - ps: ls
   - ps: cd ..
 
@@ -150,7 +150,7 @@ build_script:
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
   - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
-  - ps: cp "$env:LAPACK\*.lib" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
+  - ps: cp "$env:LAPACK\*.lib" ".\build\lib.win-amd64-$env:PYTHON_VERSION"
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
