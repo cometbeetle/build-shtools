@@ -114,6 +114,7 @@ install:
   - ps: cd lapack
   - ps: wget $env:LAPACK_URL -OutFile $env:LAPACK_LIB
   - ps: wget $env:BLAS_URL -OutFile $env:BLAS_LIB
+  - ps: ls
   - ps: cd ..
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
@@ -148,12 +149,7 @@ build_script:
   # Copy dependent DLLs
   - ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
   - ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
-
-  # Trying to move fftw files so that they are found by linker
-  #- ps: md -Force .\build\temp.win-amd64-$env:PYTHON_VERSION
-  #- ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.dll" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
-  #- ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.h" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
-  #- ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.lib" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
+  - ps: cp "$env:LAPACK\*.lib" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
