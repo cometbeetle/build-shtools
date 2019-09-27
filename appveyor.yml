@@ -99,6 +99,10 @@ install:
   - ps: lib /machine:x64 /def:libfftw3.def
   - ps: lib /machine:x64 /def:libfftw3f.def
   - ps: lib /machine:x64 /def:libfftw3l.def
+  - ps: cp libfftw3.lib fftw3.lib
+  - ps: cp libfftw3f.lib fftw3f.lib
+  - ps: cp libfftw3l.lib fftw3l.lib
+  - ps: ls
   - ps: cd ..
 
   # Install LAPACK and BLAS
@@ -109,7 +113,6 @@ install:
   - ps: cd lapack
   - ps: wget $env:LAPACK_URL -OutFile $env:LAPACK_LIB
   - ps: wget $env:BLAS_URL -OutFile $env:BLAS_LIB
-  - ps: ls
   - ps: cd ..
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
@@ -150,13 +153,6 @@ build_script:
   - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.dll" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
   - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.h" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
   - ps: cp "$env:APPVEYOR_BUILD_FOLDER\fftw\*.lib" ".\build\temp.win-amd64-$env:PYTHON_VERSION"
-
-  - ps: python -c "import sys; print(sys.platform)"
-  - ps: ls 'C:\\projects\\build-shtools\\fftw'
-  - ps: ls 'C:\\projects\\build-shtools\\lapack'
-  - ps: ls '.\build\temp.win-amd64-$env:PYTHON_VERSION'
-  - ps: ls 'build\temp.win-amd64-$env:PYTHON_VERSION'
-  - ps: ls 'build\\temp.win-amd64-$env:PYTHON_VERSION'
 
   # Build wheel
   - pip wheel -v -v -v --wheel-dir=dist .
