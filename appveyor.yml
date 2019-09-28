@@ -62,8 +62,7 @@ init:
           Write-Host "There are newer queued builds for this pull request, skipping build."
           Exit-AppveyorBuild
         }
-  - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-  - set PATH=C:\MinGW\bin;%PATH%
+  #- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install:
   - cmd: echo "Filesystem root:"
