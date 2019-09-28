@@ -155,9 +155,9 @@ install:
   - ps: |
       $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
       rm -r -Force "$NumpyDir\distutils"
-      mv numpy-distutils\numpy\distutils $NumpyDir
-      rm -r -Force "$NumpyDir\compat"
-      mv numpy-distutils\numpy\compat $NumpyDir
+      $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
+      git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
+      mv $tmpdir\numpy\distutils $NumpyDir
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
