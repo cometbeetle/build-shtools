@@ -62,7 +62,7 @@ init:
           Write-Host "There are newer queued builds for this pull request, skipping build."
           Exit-AppveyorBuild
         }
-  #- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+  - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install:
   - cmd: echo "Filesystem root:"
@@ -179,9 +179,6 @@ build_script:
           $MINGW = $env:MINGW_64
       }
       $env:Path += ";$MINGW"
-
-  # Install mingw gfortran
-  - mingw-get install gfortran
 
   # Copy dependent DLLs
   #- ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
