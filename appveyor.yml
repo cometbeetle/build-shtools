@@ -165,7 +165,8 @@ install:
       $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
       git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
       mv $tmpdir\numpy\distutils $NumpyDir
-  # compat? on scipy-wheels?
+      rm -r -Force "$NumpyDir\compat"
+      mv $tmpdir\numpy\compat $NumpyDir
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
