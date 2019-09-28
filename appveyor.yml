@@ -18,29 +18,28 @@ platform:
   - x64
 
 environment:
-  # LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/LAPACK.lib
-  LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.lib
-  LAPACK_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.dll
-  LAPACK_LIB: lapack.lib
-  LAPACK_DLL: liblapack.dll
-  # BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/BLAS.lib
-  BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.lib
-  BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.dll
-  BLAS_LIB: blas.lib
-  BLAS_DLL: libblas.dll
-  FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
-  FFTW_ZIP: fftw-3.3.5-dll32.zip
-
   global:
+      MINGW_32: C:\mingw-w64\i686-6.3.0-posix-dwarf-rt_v5-rev1\mingw32\bin
+      MINGW_64: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin
+      LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.lib
+      LAPACK_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.dll
+      LAPACK_LIB: lapack.lib
+      LAPACK_DLL: liblapack.dll
+      BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.lib
+      BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.dll
+      BLAS_LIB: blas.lib
+      BLAS_DLL: libblas.dll
+      FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
+      FFTW_ZIP: fftw-3.3.5-dll32.zip
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       PYPI_PASSWORD:
           secure: qzj1LjjInqPzpfidSH9qaMbftLIzD9s9kWQfSZWG5KQ=
       PYPITEST_PASSWORD:
           secure: AC+ebBizFsGGHleha9J4+u21eadTMZ9cCwUzlbCYHdw=
+      BUILD_COMMIT: master
 
   matrix:
-
     - PYTHON: C:\Python36-x64
       PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
@@ -66,18 +65,37 @@ init:
   - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
   - set PATH=C:\MinGW\bin;%PATH%
 
-
 install:
-  - if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
-  - if "%PYTHON_VERSION%" == "3.7" set "BASE_PYTHON_VERSION=37"
-  - if "%PYTHON_VERSION%" == "3.8" set "BASE_PYTHON_VERSION=38"
-  - if "%PYTHON_ARCH%" == "64" set "ARCH_LABEL=-x64"
+  - cmd: echo "Filesystem root:"
+  - dir C:\
+
+  - echo "Installed SDKs:"
+  - dir "C:/Program Files/Microsoft SDKs/Windows"
+  
+  - echo "MINGW_32"
+  - dir MINGW_32
 
   # Get needed submodules
   - git submodule update --init --recursive
 
-  # Install mingw gfortran
-  - mingw-get install gfortran
+  # Install new Python if necessary
+  - ps: .\multibuild\install_python.ps1
+
+  # Prepend newly installed Python to the PATH of this build (this cannot be
+  # done from inside the powershell script as it would require to restart
+  # the parent CMD process).
+  - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+
+  # Check that we have the expected version and architecture for Python
+  - python --version
+  - >-
+     python -c "import sys,platform,struct;
+     print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
+
+  #- if "%PYTHON_VERSION%" == "3.6" set "BASE_PYTHON_VERSION=36"
+  #- if "%PYTHON_VERSION%" == "3.7" set "BASE_PYTHON_VERSION=37"
+  #- if "%PYTHON_VERSION%" == "3.8" set "BASE_PYTHON_VERSION=38"
+  #- if "%PYTHON_ARCH%" == "64" set "ARCH_LABEL=-x64"
 
   # These are already installed on appveyor.  Update them.
   #- set CONDA_ROOT=C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%
@@ -94,6 +112,7 @@ install:
 
   # Install the required packages
   #- conda install flang
+  #- flang --version
 
   # Install FFTW v3.3.5
   # Need to rename files "3-3" to just "3" as well as rename
@@ -132,19 +151,6 @@ install:
   # - dumpbin /SYMBOLS lapack.lib
   - ps: cd ..
 
-  # Prepend newly installed Python to the PATH of this build (this cannot be
-  # done from inside the powershell script as it would require to restart
-  # the parent CMD process).
-  - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
-
-  # Check that we have the expected version and architecture for Python
-  - python --version
-  #- flang --version
-
-  - >-
-     python -c "import sys,platform,struct;
-     print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
-
   # Upgrade to the latest pip.
   - python -m pip install -U pip setuptools wheel
 
@@ -158,10 +164,23 @@ install:
       $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
       git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
       mv $tmpdir\numpy\distutils $NumpyDir
+  # compat? on scipy-wheels?
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
   - git checkout test
+
+  - ps: |
+      $PYTHON_ARCH = $env:PYTHON_ARCH
+      If ($PYTHON_ARCH -eq 32) {
+          $MINGW = $env:MINGW_32
+      } Else {
+          $MINGW = $env:MINGW_64
+      }
+      $env:Path += ";$MINGW"
+
+  # Install mingw gfortran
+  - mingw-get install gfortran
 
   # Copy dependent DLLs
   #- ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
