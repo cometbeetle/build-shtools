@@ -19,17 +19,17 @@ platform:
 
 environment:
   # LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/LAPACK.lib
-  LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/liblapack.lib
-  LAPACK_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/liblapack.dll
+  LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.lib
+  LAPACK_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.dll
   LAPACK_LIB: lapack.lib
   LAPACK_DLL: liblapack.dll
   # BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.5.0/Static-INTEL/Win32/BLAS.lib
-  BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/libblas.lib
-  BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/libblas.dll
+  BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.lib
+  BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.dll
   BLAS_LIB: blas.lib
   BLAS_DLL: libblas.dll
-  FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
-  FFTW_ZIP: fftw-3.3.5-dll32.zip
+  FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
+  FFTW_ZIP: fftw-3.3.5-dll64.zip
 
   global:
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
