@@ -151,6 +151,14 @@ install:
   # Install the released numpy
   - pip install numpy
 
+  # Replace numpy distutils with a version that can build with msvc + mingw-gfortran.
+  - ps: |
+      $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
+      rm -r -Force "$NumpyDir\distutils"
+      mv numpy-distutils\numpy\distutils $NumpyDir
+      rm -r -Force "$NumpyDir\compat"
+      mv numpy-distutils\numpy\compat $NumpyDir
+
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
   - git checkout test
