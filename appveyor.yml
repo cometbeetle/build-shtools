@@ -189,13 +189,13 @@ build_script:
   # * Python 3.6
   - mkdir build\lib.win32-3.6\pyshtools\extra-dll
   - mkdir build\lib.win-amd64-3.6\pyshtools\extra-dll
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\scipy\extra-dll\"
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\scipy\extra-dll\"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\pyshtools\extra-dll\"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\pyshtools\extra-dll\"
   # * Python 3.7
   - mkdir build\lib.win32-3.7\pyshtools\extra-dll
   - mkdir build\lib.win-amd64-3.7\pyshtools\extra-dll
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\scipy\extra-dll\"
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\scipy\extra-dll\"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.7\pyshtools\extra-dll\"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.7\pyshtools\extra-dll\"
 
   # Copy dependent DLLs
   #- ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
