@@ -24,11 +24,11 @@ environment:
       LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.lib
       LAPACK_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.dll
       LAPACK_LIB: liblapack.lib
-      LAPACK_DLL: liblapack.dll
+      LAPACK_DLL: lapack.dll
       BLAS_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.lib
       BLAS_DLL_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/libblas.dll
       BLAS_LIB: libblas.lib
-      BLAS_DLL: libblas.dll
+      BLAS_DLL: blas.dll
       FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
       FFTW_ZIP: fftw-3.3.5-dll32.zip
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
@@ -183,19 +183,19 @@ build_script:
   # Copy over additional DLLs to bundle to the wheels // IS THIS NECESSARY? MW
   #
   # The find commands below are mainly to find the paths where the libraries are.
-  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 14.0" -type f -name 'msvcp*.dll'
-  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 10.0" -type f -name 'msvcp*.dll'
-  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 9.0" -type f -name 'msvcp*.dll'
+  #- C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 14.0" -type f -name 'msvcp*.dll'
+  #- C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 10.0" -type f -name 'msvcp*.dll'
+  #- C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 9.0" -type f -name 'msvcp*.dll'
   # * Python 3.6
-  - mkdir build\lib.win32-3.6\pyshtools\extra-dll
-  - mkdir build\lib.win-amd64-3.6\pyshtools\extra-dll
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\pyshtools\extra-dll\"
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\pyshtools\extra-dll\"
+  #- mkdir build\lib.win32-3.6\pyshtools\extra-dll
+  #- mkdir build\lib.win-amd64-3.6\pyshtools\extra-dll
+  #- copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\pyshtools\extra-dll\"
+  #- copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\pyshtools\extra-dll\"
   # * Python 3.7
-  - mkdir build\lib.win32-3.7\pyshtools\extra-dll
-  - mkdir build\lib.win-amd64-3.7\pyshtools\extra-dll
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.7\pyshtools\extra-dll\"
-  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.7\pyshtools\extra-dll\"
+  #- mkdir build\lib.win32-3.7\pyshtools\extra-dll
+  #- mkdir build\lib.win-amd64-3.7\pyshtools\extra-dll
+  #- copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.7\pyshtools\extra-dll\"
+  #- copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.7\pyshtools\extra-dll\"
 
   # Copy dependent DLLs
   #- ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
