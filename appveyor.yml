@@ -31,6 +31,9 @@ environment:
       BLAS_DLL: blas.dll
       FFTW_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
       FFTW_ZIP: fftw-3.3.5-dll32.zip
+      NUMPY_BUILD_DEP: numpy
+      CYTHON_BUILD_DEP: Cython
+      PYBIND11_BUILD_DEP: pybind11
       APPVEYOR_SAVE_CACHE_ON_ERROR: true
       APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
       PYPI_PASSWORD:
@@ -155,8 +158,8 @@ install:
   # Upgrade to the latest pip.
   - python -m pip install -U pip setuptools wheel
 
-  # Install the released numpy
-  - pip install numpy
+  # Install build requirements
+  - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%" "%PYBIND11_BUILD_DEP%"
 
   # Replace numpy distutils with a version that can build with msvc + mingw-gfortran.
   - ps: |
