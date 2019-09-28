@@ -180,6 +180,23 @@ build_script:
       }
       $env:Path += ";$MINGW"
 
+  # Copy over additional DLLs to bundle to the wheels
+  #
+  # The find commands below are mainly to find the paths where the libraries are.
+  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 14.0" -type f -name 'msvcp*.dll'
+  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 10.0" -type f -name 'msvcp*.dll'
+  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 9.0" -type f -name 'msvcp*.dll'
+  # * Python 3.6
+  - mkdir build\lib.win32-3.6\pyshtools\extra-dll
+  - mkdir build\lib.win-amd64-3.6\pyshtools\extra-dll
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\scipy\extra-dll\"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\scipy\extra-dll\"
+  # * Python 3.7
+  - mkdir build\lib.win32-3.7\pyshtools\extra-dll
+  - mkdir build\lib.win-amd64-3.7\pyshtools\extra-dll
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win32-3.6\scipy\extra-dll\"
+  - copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" "build\lib.win-amd64-3.6\scipy\extra-dll\"
+
   # Copy dependent DLLs
   #- ps: md -Force .\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools
   #- ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
