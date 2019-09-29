@@ -180,7 +180,7 @@ build_script:
       If ($PYTHON_ARCH -eq 32) {
           $MINGW = $env:MINGW_32
       } Else {
-          $MINGW = $env:MINGW_32
+          $MINGW = $env:MINGW_64
       }
       $env:Path += ";$MINGW"
 
@@ -206,6 +206,7 @@ build_script:
   #- ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
   # Build wheel
+  - pip install -e -v .
   - pip wheel -v -v -v --wheel-dir=dist .
 
 on_success:
