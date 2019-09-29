@@ -78,10 +78,6 @@ install:
   - dir %MINGW_32%
   - echo "MINGW_64"
   - dir %MINGW_64%
-  - dir C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64
-  - dir C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\lib
-  - dir C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\libexec
-  - dir C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\include
 
   # Get needed submodules
   - git submodule update --init --recursive
@@ -125,39 +121,39 @@ install:
   # Install FFTW v3.3.5
   # Need to rename files "3-3" to just "3" as well as rename
   # libfftw3x.lib to fftw3x.lib
-  #- echo Installing FFTW
-  #- ps: mkdir fftw
-  #- ps: cd fftw
-  #- set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
+  - echo Installing FFTW
+  - ps: mkdir fftw
+  - ps: cd fftw
+  - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
   # This downloads the windows 64-bit pre-compiled dlls
-  #- ps: wget $env:FFTW_URL -OutFile $env:FFTW_ZIP
-  #- ps: 7z x $env:FFTW_ZIP
-  #- move libfftw3-3.dll libfftw3.dll
-  #- move libfftw3f-3.dll libfftw3f.dll
-  #- move libfftw3l-3.dll libfftw3l.dll
-  #- move libfftw3-3.def libfftw3.def
-  #- move libfftw3f-3.def libfftw3f.def
-  #- move libfftw3l-3.def libfftw3l.def
-  #- ps: lib /machine:x64 /def:libfftw3.def
-  #- ps: lib /machine:x64 /def:libfftw3f.def
-  #- ps: lib /machine:x64 /def:libfftw3l.def
-  #- ps: cp libfftw3.lib fftw3.lib
-  #- ps: cp libfftw3f.lib fftw3f.lib
-  #- ps: cp libfftw3l.lib fftw3l.lib
-  #- ps: cd ..
+  - ps: wget $env:FFTW_URL -OutFile $env:FFTW_ZIP
+  - ps: 7z x $env:FFTW_ZIP
+  - move libfftw3-3.dll libfftw3.dll
+  - move libfftw3f-3.dll libfftw3f.dll
+  - move libfftw3l-3.dll libfftw3l.dll
+  - move libfftw3-3.def libfftw3.def
+  - move libfftw3f-3.def libfftw3f.def
+  - move libfftw3l-3.def libfftw3l.def
+  - ps: lib /machine:x64 /def:libfftw3.def
+  - ps: lib /machine:x64 /def:libfftw3f.def
+  - ps: lib /machine:x64 /def:libfftw3l.def
+  - ps: cp libfftw3.lib fftw3.lib
+  - ps: cp libfftw3f.lib fftw3f.lib
+  - ps: cp libfftw3l.lib fftw3l.lib
+  - ps: cd ..
 
   # Install LAPACK and BLAS
-  #- echo Installing LAPACK and BLAS
-  #- ps: mkdir lapack
-  #- set LAPACK=%APPVEYOR_BUILD_FOLDER%\lapack
-  #- set BLAS=%APPVEYOR_BUILD_FOLDER%\lapack
-  #- ps: cd lapack
-  #- ps: wget $env:LAPACK_LIB_URL -OutFile $env:LAPACK_LIB
-  #- ps: wget $env:BLAS_LIB_URL -OutFile $env:BLAS_LIB
-  #- ps: wget $env:LAPACK_DLL_URL -OutFile $env:LAPACK_DLL
-  #- ps: wget $env:BLAS_DLL_URL -OutFile $env:BLAS_DLL
+  - echo Installing LAPACK and BLAS
+  - ps: mkdir lapack
+  - set LAPACK=%APPVEYOR_BUILD_FOLDER%\lapack
+  - set BLAS=%APPVEYOR_BUILD_FOLDER%\lapack
+  - ps: cd lapack
+  - ps: wget $env:LAPACK_LIB_URL -OutFile $env:LAPACK_LIB
+  - ps: wget $env:BLAS_LIB_URL -OutFile $env:BLAS_LIB
+  - ps: wget $env:LAPACK_DLL_URL -OutFile $env:LAPACK_DLL
+  - ps: wget $env:BLAS_DLL_URL -OutFile $env:BLAS_DLL
   # - dumpbin /SYMBOLS lapack.lib
-  #- ps: cd ..
+  - ps: cd ..
 
   # Upgrade to the latest pip.
   - python -m pip install -U pip setuptools wheel
@@ -184,7 +180,7 @@ build_script:
       If ($PYTHON_ARCH -eq 32) {
           $MINGW = $env:MINGW_32
       } Else {
-          $MINGW = $env:MINGW_64
+          $MINGW = $env:MINGW_32
       }
       $env:Path += ";$MINGW"
 
