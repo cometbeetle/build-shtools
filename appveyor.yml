@@ -44,12 +44,12 @@ environment:
 
   matrix:
     - PYTHON: C:\Python36-x64
-      PYTHON_VERSION: "3.6"
-      PYTHON_ARCH: "64"
+      PYTHON_VERSION: 3.6
+      PYTHON_ARCH: 64
 
     - PYTHON: C:\Python37-x64
-      PYTHON_VERSION: "3.7"
-      PYTHON_ARCH: "64"
+      PYTHON_VERSION: 3.7
+      PYTHON_ARCH: 64
 
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
@@ -180,7 +180,7 @@ build_script:
       If ($PYTHON_ARCH -eq 32) {
           $MINGW = $env:MINGW_32
       } Else {
-          $MINGW = $env:MINGW_32
+          $MINGW = $env:MINGW_64
       }
       $env:Path += ";$MINGW"
 
