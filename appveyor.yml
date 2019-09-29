@@ -180,7 +180,7 @@ build_script:
       If ($PYTHON_ARCH -eq 32) {
           $MINGW = $env:MINGW_32
       } Else {
-          $MINGW = $env:MINGW_64
+          $MINGW = $env:MINGW_32
       }
       $env:Path += ";$MINGW"
 
