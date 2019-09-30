@@ -206,7 +206,6 @@ build_script:
   #- ps: cp "$env:CONDA_ROOT\Library\bin\*.dll" ".\build\lib.win-amd64-$env:PYTHON_VERSION\pyshtools"
 
   # Build wheel
-  - pip install pyshtools -v -e .
   - pip wheel -v -v -v --wheel-dir=dist .
 
 on_success:
