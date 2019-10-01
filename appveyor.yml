@@ -19,6 +19,7 @@ platform:
 
 environment:
   global:
+      MINGW2: C:\MinGW\bin
       MINGW_32: C:\mingw-w64\i686-6.3.0-posix-dwarf-rt_v5-rev1\mingw32\bin
       MINGW_64: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin
       LAPACK_LIB_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/liblapack.lib
@@ -78,6 +79,8 @@ install:
   - dir %MINGW_32%
   - echo "MINGW_64"
   - dir %MINGW_64%
+
+  - dir %MINGW2%
 
   # Get needed submodules
   - git submodule update --init --recursive
@@ -178,9 +181,9 @@ build_script:
   - ps: |
       $PYTHON_ARCH = $env:PYTHON_ARCH
       If ($PYTHON_ARCH -eq 32) {
-          $MINGW = $env:MINGW_32
+          $MINGW = $env:MINGW2
       } Else {
-          $MINGW = $env:MINGW_64
+          $MINGW = $env:MINGW2
       }
       $env:Path += ";$MINGW"
 
