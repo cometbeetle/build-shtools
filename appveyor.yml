@@ -65,7 +65,7 @@ init:
           Write-Host "There are newer queued builds for this pull request, skipping build."
           Exit-AppveyorBuild
         }
-  - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+  #- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install:
   - cmd: echo "Filesystem root:"
@@ -124,26 +124,26 @@ install:
   # Install FFTW v3.3.5
   # Need to rename files "3-3" to just "3" as well as rename
   # libfftw3x.lib to fftw3x.lib
-  - echo Installing FFTW
-  - ps: mkdir fftw
-  - ps: cd fftw
-  - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
-  # This downloads the windows 64-bit pre-compiled dlls
-  - ps: wget $env:FFTW_URL -OutFile $env:FFTW_ZIP
-  - ps: 7z x $env:FFTW_ZIP
-  - move libfftw3-3.dll libfftw3.dll
-  - move libfftw3f-3.dll libfftw3f.dll
-  - move libfftw3l-3.dll libfftw3l.dll
-  - move libfftw3-3.def libfftw3.def
-  - move libfftw3f-3.def libfftw3f.def
-  - move libfftw3l-3.def libfftw3l.def
-  - ps: lib /machine:x64 /def:libfftw3.def
-  - ps: lib /machine:x64 /def:libfftw3f.def
-  - ps: lib /machine:x64 /def:libfftw3l.def
-  - ps: cp libfftw3.lib fftw3.lib
-  - ps: cp libfftw3f.lib fftw3f.lib
-  - ps: cp libfftw3l.lib fftw3l.lib
-  - ps: cd ..
+  #- echo Installing FFTW
+  #- ps: mkdir fftw
+  #- ps: cd fftw
+  #- set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
+  # This downloads the windows 32-bit pre-compiled dlls
+  #- ps: wget $env:FFTW_URL -OutFile $env:FFTW_ZIP
+  #- ps: 7z x $env:FFTW_ZIP
+  #- move libfftw3-3.dll libfftw3.dll
+  #- move libfftw3f-3.dll libfftw3f.dll
+  #- move libfftw3l-3.dll libfftw3l.dll
+  #- move libfftw3-3.def libfftw3.def
+  #- move libfftw3f-3.def libfftw3f.def
+  #- move libfftw3l-3.def libfftw3l.def
+  #- ps: lib /machine:x64 /def:libfftw3.def
+  #- ps: lib /machine:x64 /def:libfftw3f.def
+  #- ps: lib /machine:x64 /def:libfftw3l.def
+  #- ps: cp libfftw3.lib fftw3.lib
+  #- ps: cp libfftw3f.lib fftw3f.lib
+  #- ps: cp libfftw3l.lib fftw3l.lib
+  #- ps: cd ..
 
   # Install LAPACK and BLAS
   - echo Installing LAPACK and BLAS
