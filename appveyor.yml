@@ -79,9 +79,7 @@ install:
   - dir %MINGW_32%
   - echo "MINGW_64"
   - dir %MINGW_64%
-  - dir C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"
-  - dir C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC
-  
+
   # Get needed submodules
   - git submodule update --init --recursive
 
@@ -128,7 +126,7 @@ install:
   - ps: mkdir fftw
   - ps: cd fftw
   - set FFTW=%APPVEYOR_BUILD_FOLDER%\fftw
-  # This downloads the windows 32-bit pre-compiled dlls
+  # This downloads the windows 64-bit pre-compiled dlls
   - ps: wget $env:FFTW_URL -OutFile $env:FFTW_ZIP
   - ps: 7z x $env:FFTW_ZIP
   - move libfftw3-3.dll libfftw3.dll
@@ -185,7 +183,7 @@ build_script:
       } Else {
           $MINGW = $env:MINGW_64
       }
-      $env:Path = "$MINGW;$env:Path"
+      $env:Path += ";$MINGW"
 
   # Copy over additional DLLs to bundle to the wheels // IS THIS NECESSARY? MW
   #
