@@ -185,7 +185,7 @@ build_script:
       } Else {
           $MINGW = $env:MINGW_64
       }
-      $env:Path = "$env:MINGW;$env:Path"
+      $env:Path = "$MINGW;$env:Path"
 
   # Copy over additional DLLs to bundle to the wheels // IS THIS NECESSARY? MW
   #
