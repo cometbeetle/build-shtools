@@ -79,7 +79,7 @@ install:
   - echo "MINGW_64"
   - dir %MINGW_64%
 
-  - dir C:\MinGW\mingw32
+  - dir C:\mingw-w64
 
   # Get needed submodules
   - git submodule update --init --recursive
