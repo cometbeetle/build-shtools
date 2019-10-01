@@ -73,14 +73,15 @@ install:
 
   - echo "Installed SDKs:"
   - dir "C:/Program Files/Microsoft SDKs/Windows"
-  
+
+  - dir C:\mingw-w64
   - echo "MINGW_32"
   - dir %MINGW_32%
   - echo "MINGW_64"
   - dir %MINGW_64%
-
-  - dir C:\mingw-w64
-
+  - dir C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"
+  - dir C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC
+  
   # Get needed submodules
   - git submodule update --init --recursive
 
