@@ -81,6 +81,7 @@ install:
   - dir %MINGW_64%
 
   - dir %MINGW2%
+  - dir C:\MinGW
 
   # Get needed submodules
   - git submodule update --init --recursive
