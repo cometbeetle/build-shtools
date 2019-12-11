@@ -1,4 +1,4 @@
-# As config was originally based on an example by Olivier Grisel. Thanks!
+# Config was originally based on an example by Olivier Grisel. Thanks!
 # https://github.com/ogrisel/python-appveyor-demo/blob/master/appveyor.yml
 
 # There are several possible build configurations:
@@ -13,8 +13,8 @@
 #   a) NumPy python package with generic LAPACK (https://pypi.org/project/numpy/) or
 #   b) NumPy+MKL unofficial build (https://www.lfd.uci.edu/~gohlke/pythonlibs/)
 #
-# Here we use most generic build with LAPACK b), FFTW binary libray b) and generic NumPy b)
-#
+# Here we use most generic build with LAPACK b), FFTW binary libray b) and
+# generic NumPy b)
 
 clone_depth: 50
 
@@ -161,17 +161,6 @@ install:
   - python -m pip install -U pip setuptools wheel
   - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%"
 
-  # Replace numpy distutils with a version that can build with msvc + mingw-gfortran.
-  # Note: for today, 10 Dec 2019, this replacement does not work.
-  # - ps: |
-  #    $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
-  #    rm -r -Force "$NumpyDir\distutils"
-  #    $tmpdir = New-TemporaryFile | %{ rm $_; mkdir $_ }
-  #    git clone -q --depth=1 https://github.com/numpy/numpy.git $tmpdir
-  #    mv $tmpdir\numpy\distutils $NumpyDir
-  #    rm -r -Force "$NumpyDir\compat"
-  #    mv $tmpdir\numpy\compat $NumpyDir
-
   # Patch numpy distutils\system_info.py that can build with mingw gcc and gfortran
   # This patch is suitable for numpy 1.17.4
   - ps: |
@@ -187,7 +176,6 @@ install:
   # We want to compile C++ and Fortran sources with the same mingw compiler
   - echo [build]>> %PYTHON%\Lib\distutils\distutils.cfg
   - echo compiler = mingw32>> %PYTHON%\Lib\distutils\distutils.cfg
-
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
@@ -220,4 +208,4 @@ build_script:
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  #- twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
