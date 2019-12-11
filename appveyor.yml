@@ -208,4 +208,4 @@ build_script:
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/* --verbose
