@@ -17,8 +17,6 @@
 # generic NumPy b)
 
 clone_depth: 50
-
-# No reason for us to restrict the number concurrent jobs
 max_jobs: 100
 
 branches:
@@ -207,5 +205,5 @@ build_script:
 
 on_success:
   - pip install twine
-  #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  - twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
+  #- twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
