@@ -109,10 +109,6 @@ install:
 
   # Get needed submodules
   - git submodule update --init --recursive
-  - ps: cd SHTOOLS
-  - git describe --tags
-  - git branch --list
-  - ps: cd ..
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -183,7 +179,6 @@ install:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
-  - git checkout test
 
   - ps: |
       $PYTHON_ARCH = $env:PYTHON_ARCH
