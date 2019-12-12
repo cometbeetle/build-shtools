@@ -203,9 +203,10 @@ build_script:
   - dir %PYTHON_BUILD_DIR%\pyshtools
 
   # Build wheel
-  - pip wheel -v -v -v --wheel-dir=dist .
+  - pip wheel -v -v -v --no-deps --wheel-dir=dist .
+  - dir dist
 
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/* --verbose
+  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
