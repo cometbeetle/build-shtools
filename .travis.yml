@@ -19,7 +19,7 @@ branches:
   - master
 
 language: python
-python: 3.5
+python: 3.6
 sudo: required
 dist: trusty
 services: docker
@@ -27,7 +27,7 @@ services: docker
 matrix:
   exclude:
       # Exclude the default Python 3.5 build
-      - python: 3.5
+      - python: 3.6
   include:
     - os: linux
       env:
@@ -50,6 +50,10 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.7
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=3.8
 
 before_install:
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP"
