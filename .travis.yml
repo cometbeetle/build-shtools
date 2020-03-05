@@ -19,15 +19,11 @@ branches:
   - master
 
 language: python
-python: 3.6
 sudo: required
 dist: trusty
 services: docker
 
 matrix:
-  exclude:
-      # Exclude the default Python 3.5 build
-      - python: 3.6
   include:
     - os: linux
       env:
