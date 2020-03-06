@@ -159,17 +159,6 @@ install:
   - python -m pip install -U pip setuptools wheel
   - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%"
 
-  # Patch numpy distutils\system_info.py that can build with mingw gcc and gfortran
-  # This patch is suitable for numpy 1.17.4
-  - ps: |
-     $NumpyDir = $((python -c 'import os; import numpy; print(os.path.dirname(numpy.__file__))') | Out-String).Trim()
-     $FileName = "$NumpyDir\distutils\system_info.py"
-     $LineNumber = 774
-     $Patch = "`n" + " " * 8 + "if sys.platform == 'win32':`n" + ' '  * 12 + "return[]`n"
-     $fileContent = Get-Content $FileName
-     $fileContent[774] += $Patch
-     $fileContent | Set-Content $FileName
-
   # Setup mingw C++ compiler explicitly
   # We want to compile C++ and Fortran sources with the same mingw compiler
   - echo [build]>> %PYTHON%\Lib\distutils\distutils.cfg
