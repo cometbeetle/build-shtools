@@ -55,7 +55,7 @@ before_install:
       fi
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP versioneer"
     - TEST_DEPENDS="$NP_TEST_DEP pytest pytest-xdist pytest-faulthandler pytest-env versioneer"
-    - git clone https://github.com/SHTOOLS/SHTOOLS.git
+    #- git clone https://github.com/SHTOOLS/SHTOOLS.git
     - source multibuild/common_utils.sh
     - source multibuild/travis_steps.sh
     - before_install
