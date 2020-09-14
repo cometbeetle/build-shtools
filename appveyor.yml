@@ -107,6 +107,7 @@ install:
 
   # Get needed submodules
   - git submodule update --init --recursive
+  - git clone https://github.com/SHTOOLS/SHTOOLS.git
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
