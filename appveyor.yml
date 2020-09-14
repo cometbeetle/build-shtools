@@ -39,7 +39,7 @@ environment:
     LAPACK_64_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/
     FFTW_64_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
     FFTW_ZIP: fftw-3.3.5.zip
-    NUMPY_BUILD_DEP: numpy
+    NUMPY_BUILD_DEP: numpy versioneer
     CYTHON_BUILD_DEP: Cython
     APPVEYOR_SAVE_CACHE_ON_ERROR: true
     APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
