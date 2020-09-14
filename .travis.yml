@@ -1,7 +1,8 @@
 env:
     global:
-        - REPO_DIR=SHTOOLS
-        - BUILD_COMMIT=master
+        #- REPO_DIR=SHTOOLS
+        #- BUILD_COMMIT=master
+        - PROJECT_SPEC=pyshtools
         - PLAT=x86_64
         - NP_BUILD_DEP="numpy"
         - CYTHON_BUILD_DEP="Cython"
@@ -60,7 +61,8 @@ before_install:
     - before_install
 
 install:
-    - build_wheel $REPO_DIR $PLAT
+    #- build_wheel $REPO_DIR $PLAT
+    - build_wheel $PROJECT_SPEC $PLAT
 
 script:
     - install_run $PLAT
