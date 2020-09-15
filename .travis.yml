@@ -3,6 +3,7 @@ env:
         # To build by cloning shtools, uncomment the following two lines
         #- REPO_DIR=SHTOOLS
         #- BUILD_COMMIT=master
+        # To build by using the pypi upload of pyshtools, uncomment the following line
         - PROJECT_SPEC=pyshtools
         - PLAT=x86_64
         - NP_BUILD_DEP="numpy"
@@ -20,7 +21,7 @@ branches:
   only:
   - master
 
-language: python
+language: c
 sudo: required
 dist: trusty
 services: docker
@@ -56,6 +57,7 @@ before_install:
       fi
     - BUILD_DEPENDS="$NP_BUILD_DEP $CYTHON_BUILD_DEP versioneer"
     - TEST_DEPENDS="$NP_TEST_DEP pytest pytest-xdist pytest-faulthandler pytest-env versioneer"
+    # To build by cloning the shtools repo, uncomment the following line
     #- git clone https://github.com/SHTOOLS/SHTOOLS.git
     - source multibuild/common_utils.sh
     - source multibuild/travis_steps.sh
@@ -64,6 +66,7 @@ before_install:
 install:
     # To build from a clone of the shtools repo, uncomment the following line
     #- build_wheel $REPO_DIR $PLAT
+    # To build by using the pypi upload of pyshtools, uncomment the following line
     - build_index_wheel $PROJECT_SPEC
 
 script:
