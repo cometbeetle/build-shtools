@@ -1,5 +1,6 @@
 env:
     global:
+        # To build by cloning shtools, uncomment the following two lines
         #- REPO_DIR=SHTOOLS
         #- BUILD_COMMIT=master
         - PROJECT_SPEC=pyshtools
@@ -61,6 +62,7 @@ before_install:
     - before_install
 
 install:
+    # To build from a clone of the shtools repo, uncomment the following line
     #- build_wheel $REPO_DIR $PLAT
     - build_index_wheel $PROJECT_SPEC
 
