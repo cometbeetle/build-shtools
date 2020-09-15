@@ -4,7 +4,7 @@ env:
         #- REPO_DIR=SHTOOLS
         #- BUILD_COMMIT=master
         # To build by using the pypi upload of pyshtools, uncomment the following line
-        - PROJECT_SPEC=pyshtools
+        - PROJECT_SPEC="pyshtools"
         - PLAT=x86_64
         - NP_BUILD_DEP="numpy"
         - CYTHON_BUILD_DEP="Cython"
@@ -22,16 +22,17 @@ branches:
   - master
 
 language: c
-sudo: required
 dist: trusty
 services: docker
 
 matrix:
   include:
     - os: linux
+      compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.6
     - os: linux
+      compiler: clang
       env:
         - MB_PYTHON_VERSION=3.7
     - os: linux
