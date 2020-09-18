@@ -6,7 +6,7 @@ env:
         - CYTHON_BUILD_DEP="Cython"
         - NP_TEST_DEP="numpy"
         - UNICODE_WIDTH=32
-        #- MANYLINUX_URL="https://5cf40426d9f06eb7461d-6fe47d9331aba7cd62fc36c7196769e4.ssl.cf2.rackcdn.com"
+        - MANYLINUX_URL="https://5cf40426d9f06eb7461d-6fe47d9331aba7cd62fc36c7196769e4.ssl.cf2.rackcdn.com"
         - WHEELHOUSE_UPLOADER_USERNAME=travis-worker
         # Following generated with
         # travis encrypt -r SHTOOLS/build-shtools WHEELHOUSE_UPLOADER_SECRET=<the api key>
