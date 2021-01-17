@@ -26,7 +26,7 @@ jobs:
       PLAT: x86_64
       MB_PYTHON_VERSION: ${{ matrix.python-version }}
       TRAVIS_PYTHON_VERSION: ${{ matrix.python-version }}
-      MB_ML_VER: 2014
+      MB_ML_VER: 2010
       SCIPY_DEP: scipy
       NP_BUILD_DEP: numpy
       NP_TEST_DEP: numpy
