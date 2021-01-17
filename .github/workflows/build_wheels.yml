@@ -1,8 +1,6 @@
 name: Build PYPI wheels for pyshtools
 
-on:
-  release:
-    types: [created]
+on: push
 
 jobs:
   build:
