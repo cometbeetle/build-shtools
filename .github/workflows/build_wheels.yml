@@ -58,8 +58,8 @@ jobs:
       run: |
         git config --global user.email "mark.a.wieczorek@gmail.com"
         git config --global user.name "Github-action"
-        git commit -a -m "Update shtools and multibuild to master"
-        
+        git commit -a -m "Update shtools and multibuild to master" || true
+
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
