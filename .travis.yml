@@ -26,6 +26,9 @@ matrix:
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.8
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.9
     - os: osx
       language: generic
       env:
@@ -38,6 +41,10 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.8
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=3.9
 
 before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -62,6 +69,6 @@ after_success:
       fi
     - pip install twine
     # Upload wheels to PYPI
-    - twine upload --skip-existing --username wieczor --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    - twine upload --skip-existing --username $PYPI_USERNAME --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
     # Upload wheels to PYPITEST
-    #- twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username wieczor --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    #- twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username $PYPITEST_USERNAME --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*

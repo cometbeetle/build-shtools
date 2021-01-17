@@ -65,6 +65,11 @@ environment:
       PYTHON_ARCH: 64
       PYTHON_BUILD_DIR: build\lib.win-amd64-3.8
 
+    - PYTHON: C:\Python38-x64
+      PYTHON_VERSION: 3.9
+      PYTHON_ARCH: 64
+      PYTHON_BUILD_DIR: build\lib.win-amd64-3.9
+
     # - PYTHON: C:\Python36
     #   PYTHON_VERSION: 3.6
     #   PYTHON_ARCH: 32
