@@ -82,11 +82,11 @@ jobs:
         build_index_wheel $PROJECT_SPEC
         install_run $PLAT
 
-   - name: Upload wheels
-     run: |
-       pip install twine
-       # Upload wheels to PYPI
-       # twine upload --skip-existing --username $PYPI_USERNAME --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
-       # Upload wheels to PYPITEST
-       twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username $PYPITEST_USERNAME --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    - name: Upload wheels
+      run: |
+        pip install twine
+        # Upload wheels to PYPI
+        # twine upload --skip-existing --username $PYPI_USERNAME --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+        # Upload wheels to PYPITEST
+        twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username $PYPITEST_USERNAME --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
 
