@@ -44,6 +44,9 @@ jobs:
         submodules: recursive
         fetch-depth: 0
 
+    - name: Install libhdf5
+      if: startsWith(matrix.os,'ubuntu')
+      run: sudo apt-get install pkg-config libhdf5-100 libhdf5-dev
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
