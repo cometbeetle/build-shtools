@@ -47,7 +47,6 @@ jobs:
         fetch-depth: 0
 
     - name: Install gcc for macOS
-      shell: bash -l {0}
       if: ${{ matrix.os == 'macos-latest' }}
       run: |
         brew reinstall gcc
@@ -58,7 +57,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
  
     - name: Update submodules
-      shell: bash -l {0}
       run: |
         git commit -a -m "Update shtools and multibuild to master"
         
@@ -76,7 +74,6 @@ jobs:
         echo "TEST_DEPENDS=$(echo $NP_TEST_DEP pytest pytest-xdist pytest-faulthandler pytest-env versioneer)" >> $GITHUB_ENV;
 
     - name: Build and Install Wheels
-      shell: bash -l {0}
       run: |
         python -m pip install --upgrade pip
         source multibuild/common_utils.sh
@@ -86,11 +83,10 @@ jobs:
         install_run $PLAT
 
    - name: Upload wheels
-      shell: bash -l {0}
-      run: |
-        pip install twine
-        # Upload wheels to PYPI
-        # twine upload --skip-existing --username $PYPI_USERNAME --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
-        # Upload wheels to PYPITEST
-        twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username $PYPITEST_USERNAME --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+     run: |
+       pip install twine
+       # Upload wheels to PYPI
+       # twine upload --skip-existing --username $PYPI_USERNAME --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+       # Upload wheels to PYPITEST
+       twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username $PYPITEST_USERNAME --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
 
