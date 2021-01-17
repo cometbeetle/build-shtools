@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
         platform: [x64]
-        MB_ML_VER: [1, 2010]
+        # MB_ML_VER: [1, 2010]
 
     env:
       REPO_DIR: pyshtools
@@ -27,7 +27,7 @@ jobs:
       PLAT: x86_64
       MB_PYTHON_VERSION: ${{ matrix.python-version }}
       TRAVIS_PYTHON_VERSION: ${{ matrix.python-version }}
-      MB_ML_VER: ${{ matrix.MB_ML_VER }}
+      # MB_ML_VER: ${{ matrix.MB_ML_VER }}
       SCIPY_DEP: scipy
       NP_BUILD_DEP: numpy
       NP_TEST_DEP: numpy
@@ -56,6 +56,8 @@ jobs:
  
     - name: Update submodules
       run: |
+        git config --global user.email "mark.a.wieczorek@gmail.com"
+        git config --global user.name "Github-action"
         git commit -a -m "Update shtools and multibuild to master"
         
     - name: Push changes
