@@ -45,12 +45,6 @@ jobs:
     - name: Update submodules
       run: |
         git submodule update --remote
-        cd multibuild
-        git log -1
-        git branch --show-current
-        git checkout devel
-        git branch --show-current
-        cd ..
         git config --global user.email "mark.a.wieczorek@gmail.com"
         git config --global user.name "Github-action"
         git commit -a -m "Update shtools and multibuild to master" || true
