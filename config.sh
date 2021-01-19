@@ -13,7 +13,7 @@ function pre_build {
     set -x
     if [ -n "$IS_OSX" ]; then
         brew update
-        brew install gcc
+        brew reinstall gcc
         brew install fftw
     else
         export CC="gcc -fPIC"

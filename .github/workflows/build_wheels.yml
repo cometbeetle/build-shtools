@@ -1,6 +1,6 @@
 name: Build PYPI wheels for pyshtools
 
-on: push
+on: [repository_dispatch, push]
 
 jobs:
   build:
@@ -18,59 +18,49 @@ jobs:
         platform: [x64]
 
     env:
-      REPO_DIR: pyshtools
-      PKG_NAME: pyshtools
-      PROJECT_SPEC: pyshtools
+      REPO_DIR: SHTOOLS
       BUILD_COMMIT: master
+      # PROJECT_SPEC: pyshtools
       UNICODE_WIDTH: 32
       PLAT: x86_64
       MB_PYTHON_VERSION: ${{ matrix.python-version }}
       TRAVIS_PYTHON_VERSION: ${{ matrix.python-version }}
       MB_ML_VER: 2014
-      SCIPY_DEP: scipy
       NP_BUILD_DEP: numpy
       NP_TEST_DEP: numpy
-      CYTHON_BUILD_DEP: Cython
-      TRAVIS_REPO_SLUG: ${{ github.repository }}
-      TRAVIS_BRANCH: ${{ github.head_ref }}
-      TRAVIS_PULL_REQUEST: ${{ github.event.number }}
       TRAVIS_BUILD_DIR: ${{ github.workspace }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
       with:
+        submodules: true
         fetch-depth: 0
 
     - name: Update submodules
       run: |
         git submodule update --remote
-        git config --global user.email "mark.a.wieczorek@gmail.com"
-        git config --global user.name "Github-action"
-        git commit -a -m "Update shtools and multibuild to master" || true
-
-    - name: Install libhdf5
-      if: startsWith(matrix.os,'ubuntu')
-      run: sudo apt-get install pkg-config libhdf5-100 libhdf5-dev
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
-
     - name: Setup Environment variables
       run: |
         if [ "macos-latest" == "${{ matrix.os }}" ]; then echo "TRAVIS_OS_NAME=osx" >> $GITHUB_ENV; else echo "TRAVIS_OS_NAME=${{ matrix.os }}" >> $GITHUB_ENV; fi
         if [ "schedule" == "${{ github.event_name }}" ]; then echo "TRAVIS_EVENT_TYPE=cron" >> $GITHUB_ENV; else echo "TRAVIS_EVENT_TYPE=${{ github.event_name }}" >> $GITHUB_ENV; fi
         if [ "schedule" == "${{ github.event_name }}" ]; then echo "BUILD_COMMIT=master" >> $GITHUB_ENV; else echo "BUILD_COMMIT=$BUILD_COMMIT" >> $GITHUB_ENV; fi
-        echo "BUILD_DEPENDS=$(echo $NP_BUILD_DEP $CYTHON_BUILD_DEP versioneer)" >> $GITHUB_ENV;
-        echo "TEST_DEPENDS=$(echo $NP_TEST_DEP pytest pytest-xdist pytest-faulthandler pytest-env versioneer)" >> $GITHUB_ENV;
+        echo "BUILD_DEPENDS=$(echo $NP_BUILD_DEP) versioneer" >> $GITHUB_ENV;
+        echo "TEST_DEPENDS=$(echo $NP_TEST_DEP)" >> $GITHUB_ENV;
+
+    - name: Print some variables for debugging
+      run: |
+        cd SHTOOLS
+        git describe
+        git log -1
+        git describe
+        cd ..
 
     - name: Build and Install Wheels
       run: |
@@ -80,13 +70,24 @@ jobs:
         source multibuild/common_utils.sh
         source multibuild/travis_steps.sh
         before_install
-        build_index_wheel $PROJECT_SPEC
+        # build_index_wheel $PROJECT_SPEC
+        build_wheel $REPO_DIR $PLAT
         install_run $PLAT
+        cd SHTOOLS
+        pip install numpy
+        python setup.py version
 
     - name: Upload wheels
+      env:
+        # PYPI repository
+        # TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        #TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        # PYPITEST repository
+        TWINE_USERNAME: ${{ secrets.PYPITEST_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPITEST_PASSWORD }}
+        TWINE_REPOSITORY_URL: 'https://test.pypi.org/legacy/'
       run: |
-        # Upload wheels to PYPI
-        # twine upload --skip-existing --username $PYPI_USERNAME --password $PYPI_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+        # twine upload --skip-existing ${TRAVIS_BUILD_DIR}/wheelhouse/*
         # Upload wheels to PYPITEST
-        twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing --username $PYPITEST_USERNAME --password $PYPITEST_PASSWORD ${TRAVIS_BUILD_DIR}/wheelhouse/*
+        twine upload --skip-existing ${TRAVIS_BUILD_DIR}/wheelhouse/*
 
