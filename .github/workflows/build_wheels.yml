@@ -46,6 +46,7 @@ jobs:
       run: |
         git submodule update --remote
         cd multibuild
+        git pull
         git branch --show-current
         git checkout devel
         git branch --show-current
