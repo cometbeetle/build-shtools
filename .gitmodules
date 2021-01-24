@@ -1,7 +1,7 @@
 [submodule "SHTOOLS"]
 	path = SHTOOLS
 	url = https://github.com/SHTOOLS/SHTOOLS.git
-	branch = develop
+	branch = master
 [submodule "multibuild"]
 	path = multibuild
 	url = https://github.com/matthew-brett/multibuild.git

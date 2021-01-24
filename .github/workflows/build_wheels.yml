@@ -54,14 +54,6 @@ jobs:
         echo "BUILD_DEPENDS=$(echo $NP_BUILD_DEP) versioneer" >> $GITHUB_ENV;
         echo "TEST_DEPENDS=$(echo $NP_TEST_DEP)" >> $GITHUB_ENV;
 
-    - name: Print some variables for debugging
-      run: |
-        cd SHTOOLS
-        git describe
-        git log -1
-        git describe
-        cd ..
-
     - name: Build and Install Wheels
       run: |
         python -m pip install --upgrade pip
@@ -70,12 +62,9 @@ jobs:
         source multibuild/common_utils.sh
         source multibuild/travis_steps.sh
         before_install
-        # build_index_wheel $PROJECT_SPEC
+        # build_index_wheel $PROJECT_SPEC  # download source from pypi
         build_wheel $REPO_DIR $PLAT
         install_run $PLAT
-        cd SHTOOLS
-        pip install numpy
-        python setup.py version
 
     - name: Upload wheels
       env:
