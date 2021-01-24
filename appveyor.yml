@@ -16,7 +16,7 @@
 # Here we use most generic build with LAPACK b), FFTW binary libray b) and
 # generic NumPy b)
 
-clone_depth: 50
+clone_depth: 100
 max_jobs: 100
 
 branches:
@@ -111,9 +111,8 @@ install:
   - dir %MINGW_64%
 
   # Get needed submodules
-  - git submodule update --remote
-  #- git submodule update --init --recursive
-  # - git clone https://github.com/SHTOOLS/SHTOOLS.git
+  # - git submodule update --remote  # versioneer does not work with submodules
+  - git clone https://github.com/SHTOOLS/SHTOOLS.git
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart

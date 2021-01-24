@@ -20,7 +20,7 @@ jobs:
     env:
       REPO_DIR: SHTOOLS
       BUILD_COMMIT: master
-      # PROJECT_SPEC: pyshtools
+      PROJECT_SPEC: pyshtools
       UNICODE_WIDTH: 32
       PLAT: x86_64
       MB_PYTHON_VERSION: ${{ matrix.python-version }}
@@ -62,8 +62,8 @@ jobs:
         source multibuild/common_utils.sh
         source multibuild/travis_steps.sh
         before_install
-        # build_index_wheel $PROJECT_SPEC  # download source from pypi
-        build_wheel $REPO_DIR $PLAT
+        build_index_wheel $PROJECT_SPEC  # download source from pypi
+        # build_wheel $REPO_DIR $PLAT  # versioneer does not work with submodules
         install_run $PLAT
 
     - name: Upload wheels
