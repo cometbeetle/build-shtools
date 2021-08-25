@@ -18,6 +18,7 @@ function pre_build {
     else
         export CC="gcc -fPIC"
         build_openblas
+        ldconfig
         build_fftw
     fi
     unset FFLAGS
