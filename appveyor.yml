@@ -104,9 +104,6 @@ install:
   - cmd: echo "Filesystem root:"
   - dir C:\
 
-  - echo "Installed SDKs:"
-  - dir "C:/Program Files/Microsoft SDKs/Windows"
-
   - dir C:\mingw-w64
   - echo "MINGW_32"
   - dir %MINGW_32%
