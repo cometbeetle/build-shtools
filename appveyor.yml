@@ -101,14 +101,6 @@ init:
         }
 
 install:
-  - cmd: echo "Filesystem root:"
-  - dir C:\
-
-  - dir C:\mingw-w64
-  - echo "MINGW_32"
-  - dir %MINGW_32%
-  - echo "MINGW_64"
-  - dir %MINGW_64%
 
   # Get needed submodules
   # - git submodule update --remote  # versioneer does not work with submodules
