@@ -200,4 +200,4 @@ on_success:
   #- twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
 
 artifacts:
-  - path: '%APPVEYOR_BUILD_FOLDER%\SHTOOLS\dist\pyshtools-*.whl'
+  - path: SHTOOLS\dist\pyshtools-*.whl
