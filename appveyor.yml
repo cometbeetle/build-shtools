@@ -105,6 +105,7 @@ install:
   # Get needed submodules
   # - git submodule update --remote  # versioneer does not work with submodules
   - git clone https://github.com/SHTOOLS/SHTOOLS.git
+  - git clone https://github.com/multi-build/multibuild.git
 
   # Install new Python if necessary
   - ps: .\multibuild\install_python.ps1
