@@ -17,12 +17,9 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         include:
           - os: macos-latest
-            env:
-              PLAT: universal2
-        include:
+            platform: universal2
           - os: ubuntu-latest
-            env:
-              PLAT: x86_64
+            platform: x86_64
 
     env:
       REPO_DIR: SHTOOLS
@@ -35,7 +32,7 @@ jobs:
       NP_BUILD_DEP: numpy
       NP_TEST_DEP: numpy
       TRAVIS_BUILD_DIR: ${{ github.workspace }}
-      # PLAT: ${{ matrix.platform }}
+      PLAT: ${{ matrix.platform }}
 
     steps:
     - name: Checkout
