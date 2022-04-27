@@ -14,10 +14,10 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
-        - os: [ubuntu-latest]
-          env: PLAT = x86_64
-        - os: [macos-latest]
-          env: PLAT = universal2
+          - os: [ubuntu-latest]
+            env: PLAT = x86_64
+          - os: [macos-latest]
+            env: PLAT = universal2
 
     env:
       REPO_DIR: SHTOOLS
