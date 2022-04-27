@@ -15,36 +15,36 @@ jobs:
       matrix:
         - os: ubuntu-latest
           env:
-            - python-version: '3.7'
-            - PLAT: x86_64
+            python-version: '3.7'
+            PLAT: x86_64
         - os: ubuntu-latest
           env:
-            - python-version: '3.8'
-            - PLAT: x86_64
+            python-version: '3.8'
+            PLAT: x86_64
         - os: ubuntu-latest
           env:
-            - python-version: '3.9'
-            - PLAT: x86_64
+            python-version: '3.9'
+            PLAT: x86_64
         - os: ubuntu-latest
           env:
-            - python-version: '3.10'
-            - PLAT: x86_64
+            python-version: '3.10'
+            PLAT: x86_64
         - os: macos-latest
           env:
-            - python-version: '3.7'
-            - PLAT: universal2
+            python-version: '3.7'
+            PLAT: universal2
         - os: macos-latest
           env:
-            - python-version: '3.8'
-            - PLAT: universal2
+            python-version: '3.8'
+            PLAT: universal2
         - os: macos-latest
           env:
-            - python-version: '3.9'
-            - PLAT: universal2
+            python-version: '3.9'
+            PLAT: universal2
         - os: macos-latest
           env:
-            - python-version: '3.10'
-            - PLAT: universal2
+            python-version: '3.10'
+            PLAT: universal2
 
     env:
       REPO_DIR: SHTOOLS
