@@ -56,22 +56,22 @@ environment:
     - PYTHON: C:\Python37-x64
       PYTHON_VERSION: 3.7
       PYTHON_ARCH: 64
-      PYTHON_BUILD_DIR: build\lib.win-amd64-3.7
+      PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-37
 
     - PYTHON: C:\Python38-x64
       PYTHON_VERSION: 3.8
       PYTHON_ARCH: 64
-      PYTHON_BUILD_DIR: build\lib.win-amd64-3.8
+      PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-38
 
     - PYTHON: C:\Python39-x64
       PYTHON_VERSION: 3.9
       PYTHON_ARCH: 64
-      PYTHON_BUILD_DIR: build\lib.win-amd64-3.9
+      PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-39
 
-    - PYTHON: C:\Python39-x64
+    - PYTHON: C:\Python310-x64
       PYTHON_VERSION: '3.10'
       PYTHON_ARCH: 64
-      PYTHON_BUILD_DIR: build\lib.win-amd64-3.10
+      PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-37
 
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
@@ -151,8 +151,8 @@ install:
 
   # Setup mingw C++ compiler explicitly
   # We want to compile C++ and Fortran sources with the same mingw compiler
-  - echo [build]>> %PYTHON%\Lib\distutils\distutils.cfg
-  - echo compiler = mingw32>> %PYTHON%\Lib\distutils\distutils.cfg
+  #- echo [build]>> %PYTHON%\Lib\distutils\distutils.cfg
+  #- echo compiler = mingw32>> %PYTHON%\Lib\distutils\distutils.cfg
   - echo [build]>> %PYTHON%\Lib\site-packages\setuptools\_distutils\distutils.cfg
   - echo compiler = mingw32>> %PYTHON%\Lib\site-packages\setuptools\_distutils\distutils.cfg
 
