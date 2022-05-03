@@ -153,6 +153,8 @@ install:
   # We want to compile C++ and Fortran sources with the same mingw compiler
   - echo [build]>> %PYTHON%\Lib\distutils\distutils.cfg
   - echo compiler = mingw32>> %PYTHON%\Lib\distutils\distutils.cfg
+  - echo [build]>> %PYTHON%\Lib\site-packages\setuptools\_distutils\distutils.cfg
+  - echo compiler = mingw32>> %PYTHON%\Lib\site-packages\setuptools\_distutils\distutils.cfg
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
