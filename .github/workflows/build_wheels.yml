@@ -1,6 +1,6 @@
 name: Build PYPI wheels for pyshtools
 
-on: [repository_dispatch, push]
+on: [repository_dispatch, push, workflow_dispatch]
 
 jobs:
   build:
