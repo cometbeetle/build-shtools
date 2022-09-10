@@ -2,7 +2,7 @@
 # Test for OSX with [ -n "$IS_OSX" ]
 
 # OpenBLAS version for systems that use it.
-OPENBLAS_VERSION=0.3.19
+OPENBLAS_VERSION=0.3.20
 
 function build_fftw {
     build_simple fftw 3.3.8 http://www.fftw.org
@@ -15,6 +15,7 @@ function pre_build {
         brew update
         brew reinstall gcc
         brew install fftw
+        build_openblas
     else
         export CC="gcc -fPIC"
         build_openblas
