@@ -16,6 +16,8 @@ function pre_build {
         brew reinstall gcc
         brew install fftw
         build_openblas
+        export LDFLAGS="-L/usr/local/opt/openblas/lib"
+        export CPPFLAGS="-I/usr/local/opt/openblas/include"
     else
         export CC="gcc -fPIC"
         build_openblas
