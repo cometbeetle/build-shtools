@@ -73,6 +73,11 @@ environment:
       PYTHON_ARCH: 64
       PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-310
 
+    - PYTHON: C:\Python311-x64
+      PYTHON_VERSION: '3.11'
+      PYTHON_ARCH: 64
+      PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-311
+
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
   - "ECHO \"%APPVEYOR_SCHEDULED_BUILD%\""
