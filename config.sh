@@ -17,6 +17,7 @@ function pre_build {
         brew install fftw
         brew reinstall openblas
         # build_openblas
+        export LAPACK='/usr/local/opt/openblas'
         # export LDFLAGS="-L/usr/local/opt/openblas/lib"
         # export CPPFLAGS="-I/usr/local/opt/openblas/include"
     else
