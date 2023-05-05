@@ -15,7 +15,6 @@ function pre_build {
         brew update
         brew reinstall gcc
         brew install fftw
-        # brew reinstall openblas
         build_openblas
         export LAPACK='/usr/local/opt/openblas'
     else
