@@ -12,6 +12,8 @@ function build_fftw {
 function pre_build {
     set -x
     if [ -n "$IS_OSX" ]; then
+        # the line below is a hack to bypass an error
+        export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
         brew update
         brew reinstall gcc
         brew install fftw
