@@ -6,6 +6,8 @@ jobs:
   build:
 
     runs-on: ${{ matrix.os }}
+    permissions:
+      id-token: write
     defaults:
       run:
         shell: bash
@@ -71,12 +73,7 @@ jobs:
         install_run $PLAT
 
     - name: Upload release to PyPI
-      environment: release
-      permissions:
-        id-token: write
-      steps:
-        - name: Publish package distributions to PyPI
-          uses: pypa/gh-action-pypi-publish@release/v1
-          with:
-            packages-dir: ${TRAVIS_BUILD_DIR}/wheelhouse/
-            skip-existing: true
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        packages-dir: ${TRAVIS_BUILD_DIR}/wheelhouse/
+        skip-existing: true
