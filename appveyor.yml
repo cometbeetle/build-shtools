@@ -53,11 +53,6 @@ environment:
     BUILD_COMMIT: master
 
   matrix:
-    - PYTHON: C:\Python37-x64
-      PYTHON_VERSION: '3.7'
-      PYTHON_ARCH: 64
-      PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-37
-
     - PYTHON: C:\Python38-x64
       PYTHON_VERSION: '3.8'
       PYTHON_ARCH: 64
@@ -77,6 +72,11 @@ environment:
       PYTHON_VERSION: '3.11'
       PYTHON_ARCH: 64
       PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-311
+
+    - PYTHON: C:\Python312-x64
+      PYTHON_VERSION: '3.12'
+      PYTHON_ARCH: 64
+      PYTHON_BUILD_DIR: build\lib.win-amd64-cpython-312
 
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
