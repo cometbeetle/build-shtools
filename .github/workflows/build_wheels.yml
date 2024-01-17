@@ -36,7 +36,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: true
         fetch-depth: 0
@@ -70,16 +70,13 @@ jobs:
         # build_wheel $REPO_DIR $PLAT  # versioneer does not work with submodules
         install_run $PLAT
 
-    - name: Upload wheels
-      env:
-        # PYPI repository
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        # PYPITEST repository
-        # TWINE_USERNAME: ${{ secrets.PYPITEST_USERNAME }}
-        # TWINE_PASSWORD: ${{ secrets.PYPITEST_PASSWORD }}
-        # TWINE_REPOSITORY_URL: 'https://test.pypi.org/legacy/'
-      run: |
-        twine upload --skip-existing ${TRAVIS_BUILD_DIR}/wheelhouse/*
-        # Upload wheels to PYPITEST
-        #twine upload --skip-existing ${TRAVIS_BUILD_DIR}/wheelhouse/*
+    - name: Upload release to PyPI
+      environment: release
+      permissions:
+        id-token: write
+      steps:
+        - name: Publish package distributions to PyPI
+          uses: pypa/gh-action-pypi-publish@release/v1
+          with:
+            packages-dir: ${TRAVIS_BUILD_DIR}/wheelhouse/
+            skip-existing: true
