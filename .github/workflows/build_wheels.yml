@@ -16,11 +16,14 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
-        os: [ubuntu-latest, macos-latest]
+        os: [linux, macos-latest]
         include:
           - os: macos-latest
-          - os: ubuntu-latest
-            platform: [x86_64, aarch64]
+            platform: universal2
+          - os: linux
+            platform: x86_64
+          - os: linux
+            platform: aarch64
 
     env:
       REPO_DIR: SHTOOLS
