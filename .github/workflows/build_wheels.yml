@@ -19,9 +19,8 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         include:
           - os: macos-latest
-            platform: universal2
           - os: ubuntu-latest
-            platform: x86_64
+            platform: [x86_64, aarch64]
 
     env:
       REPO_DIR: SHTOOLS
