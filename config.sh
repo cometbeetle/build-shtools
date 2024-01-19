@@ -24,6 +24,7 @@ function pre_build {
         build_openblas
         ldconfig
         build_fftw
+	pip install jupyter
     fi
     unset FFLAGS
     set +x
