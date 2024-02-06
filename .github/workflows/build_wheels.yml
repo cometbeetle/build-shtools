@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.9', '3.10', '3.11', '3.12']
         os: [ubuntu-latest, macos-latest]
         include:
           - os: macos-latest
@@ -68,7 +68,6 @@ jobs:
         source multibuild/common_utils.sh
         source multibuild/travis_steps.sh
         before_install
-        pip install jupyter
         build_index_wheel $PROJECT_SPEC  # download source from pypi
         # build_wheel $REPO_DIR $PLAT  # versioneer does not work with submodules
         install_run $PLAT
