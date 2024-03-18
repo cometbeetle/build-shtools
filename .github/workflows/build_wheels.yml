@@ -75,5 +75,4 @@ jobs:
     - name: Upload release to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        packages-dir: ${TRAVIS_BUILD_DIR}/wheelhouse/
         skip-existing: true
