@@ -14,13 +14,12 @@ jobs:
 
     strategy:
       fail-fast: false
-      osx_image: xcode12.2
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12']
         os: [ubuntu-latest, macos-latest]
         include:
           - os: macos-latest
-            platform: universal2
+            platform: [ "x86_64", "arm64" ]
           - os: ubuntu-latest
             platform: x86_64
 
