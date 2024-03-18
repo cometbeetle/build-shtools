@@ -72,6 +72,8 @@ jobs:
         # build_wheel $REPO_DIR $PLAT  # versioneer does not work with submodules
         install_run $PLAT
 
-    - uses: actions/upload-artifact@v3
+    - name: Upload release to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        path: wheelhouse/*.whl
+        packages-dir: wheelhouse/
+        skip-existing: true
