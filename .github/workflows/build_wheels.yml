@@ -19,9 +19,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         include:
           - os: macos-latest
-            platform: x86_64
-          - os: macos-latest
-            platform: arm64
+            platform: universal2
           - os: ubuntu-latest
             platform: x86_64
 
