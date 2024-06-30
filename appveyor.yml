@@ -79,7 +79,7 @@ init:
 install:
 
   # Install MSYS2
-  - ps: curl -O https://repo.msys2.org/distrib/msys2-x86_64-latest.exe
+  - ps: Invoke-WebRequest -URI https://repo.msys2.org/distrib/msys2-x86_64-latest.exe
   - ps: .\msys2-x86_64-latest.exe in --confirm-command --accept-messages --root C:\msys64
   - ps: C:\msys64\ucrt64.exe "pacman install -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
   
