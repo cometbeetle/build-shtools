@@ -98,6 +98,9 @@ build_script:
   - python -m build
   - dir dist
 
+  - ps: $env:NEW_WHEEL=dir dist\*.whl
+  - ps: delvewheel repair $env:NEW_WHEEL -w dist
+
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
