@@ -13,7 +13,7 @@ branches:
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
-  - 'C:\msys64\ucrt64\'
+  - 'C:\msys64\var\cache'
 
 platform:
   - x64
@@ -92,7 +92,6 @@ install:
 
   # Install build requirements
   - python -m pip install -U pip build delvewheel
-  - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%" versioneer
 
 build_script:
   - SET PATH=%PATH%;c:\msys64\ucrt64\bin
