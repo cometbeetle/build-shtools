@@ -34,23 +34,11 @@ image:
 
 environment:
   global:
-    MINGW_32: C:\mingw-w64\i686-6.3.0-posix-dwarf-rt_v5-rev1\mingw32\bin
-    LAPACK_32_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win32/
-    FFTW_32_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
-    MINGW_64: C:\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin
-    MINGW_64_GF: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin
-    LAPACK_64_URL: http://icl.cs.utk.edu/lapack-for-windows/libraries/VisualStudio/3.7.0/Dynamic-MINGW/Win64/
-    FFTW_64_URL: ftp://ftp.fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
-    FFTW_ZIP: fftw-3.3.5.zip
     NUMPY_BUILD_DEP: numpy
     CYTHON_BUILD_DEP: Cython
     APPVEYOR_SAVE_CACHE_ON_ERROR: true
     APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
-    PYPI_PASSWORD:
-      secure: qzj1LjjInqPzpfidSH9qaMbftLIzD9s9kWQfSZWG5KQ=
-    PYPITEST_PASSWORD:
-      secure: AC+ebBizFsGGHleha9J4+u21eadTMZ9cCwUzlbCYHdw=
-    BUILD_COMMIT: master
+    BUILD_COMMIT: testing-windows
 
   matrix:
     - PYTHON: C:\Python39-x64
@@ -90,9 +78,14 @@ init:
 
 install:
 
+  # Install MSYS2
+  - ps: wget https://repo.msys2.org/distrib/msys2-x86_64-latest.exe
+  - ps: .\msys2-x86_64-latest.exe in --confirm-command --accept-messages --root C:\msys64
+  - ps: C:\msys64\ucrt64.exe "pacman install -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
+  
   # Get needed submodules
   # - git submodule update --remote  # versioneer does not work with submodules
-  - git clone https://github.com/SHTOOLS/SHTOOLS.git
+  - git clone https://github.com/cometbeetle/SHTOOLS.git
   - git clone https://github.com/multi-build/multibuild.git
 
   # Install new Python if necessary
@@ -109,77 +102,16 @@ install:
      python -c "import sys,platform,struct;
      print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
 
-  # Install FFTW v3.3.5
-  - ps: Write-Output Installing FFTW
-  - ps: mkdir fftw
-  - ps: $env:FFTW = "$env:APPVEYOR_BUILD_FOLDER\fftw"
-  - ps: cd fftw
-  - ps: Write-Output $env:FFTW
-  - ps: |
-      If ($env:PYTHON_ARCH -eq 32) {
-        $env:FFTW_URL = $env:FFTW_32_URL
-      } Else {
-        $env:FFTW_URL = $env:FFTW_64_URL
-      }
-  - ps: wget $env:FFTW_URL -OutFile $env:FFTW_ZIP
-  - ps: 7z x $env:FFTW_ZIP
-  # NumPy disutils are looking for %FFTW%\libfftw3.dll file
-  - ps: cp libfftw3-3.dll libfftw3.dll
-  - ps: cd ..
-
-  # Install LAPACK and BLAS
-  - ps: Write-Output Installing LAPACK and BLAS
-  - ps: mkdir lapack
-  - ps: $env:LAPACK="$env:APPVEYOR_BUILD_FOLDER\lapack"
-  - ps: $env:BLAS="$env:APPVEYOR_BUILD_FOLDER\lapack"
-  - ps: cd lapack
-  - ps: |
-      If ($env:PYTHON_ARCH -eq 32) {
-          $env:LAPACK_URL = $env:LAPACK_32_URL
-      } Else {
-          $env:LAPACK_URL = $env:LAPACK_64_URL
-      }
-  - ps: wget $env:LAPACK_URL/libblas.lib -OutFile libblas.lib
-  - ps: wget $env:LAPACK_URL/libblas.dll -OutFile libblas.dll
-  - ps: wget $env:LAPACK_URL/liblapack.lib -OutFile liblapack.lib
-  - ps: wget $env:LAPACK_URL/liblapack.dll -OutFile liblapack.dll
-  - ps: cd ..
-
   # Install build requirements
-  - python -m pip install -U pip setuptools wheel
-  - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%" versioneer
-
-  # Setup mingw C++ compiler explicitly
-  # We want to compile C++ and Fortran sources with the same mingw compiler
-  - echo [build]>> %PYTHON%\Lib\site-packages\setuptools\_distutils\distutils.cfg
-  - echo compiler = mingw32>> %PYTHON%\Lib\site-packages\setuptools\_distutils\distutils.cfg
+  - python -m pip install -U pip build delvewheel
 
 build_script:
+  - ps: $env:Path += ";C:\msys64\ucrt64\bin"
+  
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
 
-  - ps: |
-      $PYTHON_ARCH = $env:PYTHON_ARCH
-      If ($PYTHON_ARCH -eq 32) {
-          $env:MINGW = $env:MINGW_32
-      } Else {
-          $env:MINGW = $env:MINGW_64
-      }
-      $env:Path += ";$env:MINGW"
-
-  # Copy over additional DLLs to bundle to the wheels
-  - mkdir %PYTHON_BUILD_DIR%\pyshtools
-  - ps: cp "$env:LAPACK\libblas.dll" "$env:PYTHON_BUILD_DIR\pyshtools"
-  - ps: cp "$env:LAPACK\liblapack.dll" "$env:PYTHON_BUILD_DIR\pyshtools"
-  - ps: cp "$env:FFTW\libfftw3-3.dll" "$env:PYTHON_BUILD_DIR\pyshtools"
-  - ps: cp "$env:MINGW\libgcc_s_seh-1.dll" "$env:PYTHON_BUILD_DIR\pyshtools"
-  - ps: cp "$env:MINGW\libgcc_s_seh-1.dll" "$env:PYTHON_BUILD_DIR\pyshtools\libgcc_s_seh_64-1.dll"
-  - ps: cp "$env:MINGW\libquadmath-0.dll" "$env:PYTHON_BUILD_DIR\pyshtools"
-  - ps: cp "$env:MINGW\libwinpthread-1.dll" "$env:PYTHON_BUILD_DIR\pyshtools"
-  - ps: cp "$env:MINGW_64_GF\libgfortran-3.dll" "$env:PYTHON_BUILD_DIR\pyshtools\libgfortran_64-3.dll"
-  - dir %PYTHON_BUILD_DIR%\pyshtools
-
   # Build wheel
-  - pip wheel -v -v -v --no-deps --wheel-dir=dist .
+  - python -m build
   - dir dist
 
 on_success:
