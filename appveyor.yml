@@ -21,7 +21,7 @@ max_jobs: 100
 
 branches:
   only:
-    - master
+    - testing-windows
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
@@ -184,8 +184,8 @@ build_script:
 
 on_success:
   - pip install twine
-  - twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  #- twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
+  - twine upload --repository-url https://test.pypi.org/legacy/ --username __token__ --password %PYPITEST_PASSWORD% --skip-existing dist/*
 
 artifacts:
   - path: SHTOOLS\dist\pyshtools-*.whl
