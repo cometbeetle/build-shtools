@@ -23,6 +23,10 @@ image:
 
 environment:
   global:
+    PYPI_PASSWORD:
+      secure: qzj1LjjInqPzpfidSH9qaMbftLIzD9s9kWQfSZWG5KQ=
+    PYPITEST_PASSWORD:
+      secure: AC+ebBizFsGGHleha9J4+u21eadTMZ9cCwUzlbCYHdw=
     BUILD_COMMIT: master
 
   matrix:
@@ -90,6 +94,7 @@ install:
   - python -m pip install -U pip build delvewheel
 
 build_script:
+  # Use proper compiler
   - SET PATH=%PATH%;c:\msys64\ucrt64\bin
 
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
@@ -98,13 +103,14 @@ build_script:
   - python -m build
   - dir dist
 
+  # Fix DLL issues
   - ps: $env:NEW_WHEEL=dir dist\*.whl
   - ps: delvewheel repair $env:NEW_WHEEL -w dist
 
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  - twine upload --repository-url https://test.pypi.org/legacy/ --username __token__ --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  #- twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
 
 artifacts:
   - path: SHTOOLS\dist\pyshtools-*.whl
