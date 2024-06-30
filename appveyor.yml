@@ -13,6 +13,7 @@ branches:
 
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
+  - 'C:\msys64\ucrt64\'
 
 platform:
   - x64
@@ -90,7 +91,7 @@ install:
      print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
 
   # Install build requirements
-  - python -m pip install -U pip build develwheel
+  - python -m pip install -U pip build delvewheel
   - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%" versioneer
 
 build_script:
