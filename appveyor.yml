@@ -79,7 +79,8 @@ init:
 install:
 
   # Install MSYS2
-  - ps: C:\msys64\ucrt64.exe "pacman install -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
+  - ps: C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Syuu"
+  - ps: C:\msys64\usr\bin\bash -lc "pacman install -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
   
   # Get needed submodules
   # - git submodule update --remote  # versioneer does not work with submodules
@@ -104,7 +105,8 @@ install:
   - python -m pip install -U pip build delvewheel
 
 build_script:
-  - ps: $env:Path += ";C:\msys64\ucrt64\bin"
+  - ps: $env:CHERE_INVOKING = 'yes'
+  - ps: $env:MSYSTEM = 'UCRT64'
   
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
 
