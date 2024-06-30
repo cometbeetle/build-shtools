@@ -1,21 +1,6 @@
 # Config was originally based on an example by Olivier Grisel. Thanks!
 # https://github.com/ogrisel/python-appveyor-demo/blob/master/appveyor.yml
 
-# There are several possible build configurations:
-#
-# 1. LAPACK
-#   a) Intel MKL (https://software.intel.com/en-us/mkl) or
-#   b) LAPACK for Windows (https://icl.cs.utk.edu/lapack-for-windows/lapack/)
-# 2. FFTW
-#   a) pyFFTW python package (https://pypi.org/project/pyFFTW/) or
-#   b) FFTW binary library (ftp://ftp.fftw.org/pub/fftw)
-# 3. NumPy
-#   a) NumPy python package with generic LAPACK (https://pypi.org/project/numpy/) or
-#   b) NumPy+MKL unofficial build (https://www.lfd.uci.edu/~gohlke/pythonlibs/)
-#
-# Here we use most generic build with LAPACK b), FFTW binary libray b) and
-# generic NumPy b)
-
 clone_depth: 100
 max_jobs: 100
 
@@ -79,6 +64,7 @@ init:
 install:
 
   # Install MSYS2
+  - SET MSYSTEM='UCRT64'
   - C:\msys64\usr\bin\bash.exe -lc "pacman --noconfirm -Syu"
   - C:\msys64\usr\bin\bash.exe -lc "pacman -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
   
@@ -105,7 +91,7 @@ install:
   - python -m pip install -U pip build delvewheel
 
 build_script:
-  - SET PATH=%PATH%;c:\msys64\usr\bin
+  - SET PATH=%PATH%;c:\msys64\ucrt64\bin
   
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
 
