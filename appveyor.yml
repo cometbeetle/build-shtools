@@ -23,10 +23,6 @@ image:
 
 environment:
   global:
-    PYPI_PASSWORD:
-      secure: qzj1LjjInqPzpfidSH9qaMbftLIzD9s9kWQfSZWG5KQ=
-    PYPITEST_PASSWORD:
-      secure: AC+ebBizFsGGHleha9J4+u21eadTMZ9cCwUzlbCYHdw=
     BUILD_COMMIT: master
 
   matrix:
@@ -105,7 +101,7 @@ build_script:
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  - twine upload --repository-url https://test.pypi.org/legacy/ --username __token__ --password %PYPITEST_PASSWORD% --skip-existing dist/*
 
 artifacts:
   - path: SHTOOLS\dist\pyshtools-*.whl
