@@ -80,7 +80,7 @@ install:
 
   # Install MSYS2
   - C:\msys64\usr\bin\bash.exe -lc "pacman --noconfirm -Syu"
-  - C:\msys64\usr\bin\bash.exe -lc "pacman install -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
+  - C:\msys64\usr\bin\bash.exe -lc "pacman -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
   
   # Get needed submodules
   # - git submodule update --remote  # versioneer does not work with submodules
