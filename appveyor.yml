@@ -1,11 +1,14 @@
 # Config was originally based on an example by Olivier Grisel. Thanks!
 # https://github.com/ogrisel/python-appveyor-demo/blob/master/appveyor.yml
 
+# This uses the msys64 executables provided by AppVeyor
+
 clone_depth: 100
 max_jobs: 100
 
 branches:
   only:
+    - master
     - testing-windows
 
 cache:
@@ -19,11 +22,11 @@ image:
 
 environment:
   global:
-    NUMPY_BUILD_DEP: numpy
-    CYTHON_BUILD_DEP: Cython
-    APPVEYOR_SAVE_CACHE_ON_ERROR: true
-    APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
-    BUILD_COMMIT: testing-windows
+    PYPI_PASSWORD:
+      secure: qzj1LjjInqPzpfidSH9qaMbftLIzD9s9kWQfSZWG5KQ=
+    PYPITEST_PASSWORD:
+      secure: AC+ebBizFsGGHleha9J4+u21eadTMZ9cCwUzlbCYHdw=
+    BUILD_COMMIT: master
 
   matrix:
     - PYTHON: C:\Python39-x64
@@ -62,15 +65,14 @@ init:
         }
 
 install:
-
-  # Install MSYS2
+  # Install msys64 libraries
   - SET MSYSTEM='UCRT64'
   - C:\msys64\usr\bin\bash.exe -lc "pacman --noconfirm -Syu"
   - C:\msys64\usr\bin\bash.exe -lc "pacman -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw --noconfirm"
-  
+
   # Get needed submodules
   # - git submodule update --remote  # versioneer does not work with submodules
-  - git clone https://github.com/cometbeetle/SHTOOLS.git
+  - git clone https://github.com/SHTOOLS/SHTOOLS.git
   - git clone https://github.com/multi-build/multibuild.git
 
   # Install new Python if necessary
@@ -88,11 +90,12 @@ install:
      print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
 
   # Install build requirements
-  - python -m pip install -U pip build delvewheel
+  - python -m pip install -U pip build develwheel
+  - pip install "%CYTHON_BUILD_DEP%" "%NUMPY_BUILD_DEP%" versioneer
 
 build_script:
   - SET PATH=%PATH%;c:\msys64\ucrt64\bin
-  
+
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
 
   # Build wheel
@@ -102,7 +105,7 @@ build_script:
 on_success:
   - pip install twine
   #- twine upload --username wieczor --password %PYPI_PASSWORD% --skip-existing dist/*
-  - twine upload --repository-url https://test.pypi.org/legacy/ --username __token__ --password %PYPITEST_PASSWORD% --skip-existing dist/*
+  - twine upload --repository-url https://test.pypi.org/legacy/ --username wieczor --password %PYPITEST_PASSWORD% --skip-existing dist/*
 
 artifacts:
   - path: SHTOOLS\dist\pyshtools-*.whl
