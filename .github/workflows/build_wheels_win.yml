@@ -1,0 +1,98 @@
+name: Build PYPI wheels for pyshtools on Windows
+
+on: [repository_dispatch, push, workflow_dispatch]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    permissions:
+      id-token: write
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+        os: [windows-latest]
+        include:
+          - os: windows-latest
+            platform: x86_64
+
+    env:
+      REPO_DIR: SHTOOLS
+      BUILD_COMMIT: master
+      PROJECT_SPEC: pyshtools
+      UNICODE_WIDTH: 32
+      MB_PYTHON_VERSION: ${{ matrix.python-version }}
+      TRAVIS_PYTHON_VERSION: ${{ matrix.python-version }}
+      MB_ML_VER: 2014
+      NP_BUILD_DEP: numpy
+      NP_TEST_DEP: numpy
+      TRAVIS_BUILD_DIR: ${{ github.workspace }}
+      PLAT: ${{ matrix.platform }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: 0
+
+    - name: Update submodules
+      run: |
+        git submodule update --remote
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Setup Environment variables
+      run: |
+        if [ "schedule" == "${{ github.event_name }}" ]; then echo "TRAVIS_EVENT_TYPE=cron" >> $GITHUB_ENV; else echo "TRAVIS_EVENT_TYPE=${{ github.event_name }}" >> $GITHUB_ENV; fi
+        if [ "schedule" == "${{ github.event_name }}" ]; then echo "BUILD_COMMIT=master" >> $GITHUB_ENV; else echo "BUILD_COMMIT=$BUILD_COMMIT" >> $GITHUB_ENV; fi
+        echo "BUILD_DEPENDS=$(echo $NP_BUILD_DEP)" >> $GITHUB_ENV;
+        echo "TEST_DEPENDS=$(echo $NP_TEST_DEP)" >> $GITHUB_ENV;
+
+    - name: Build and Install Wheels
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+      - shell: msys2 {0}
+        run: |
+          pacman --noconfirm -Syu
+          pacman --noconfirm -S mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-fftw
+      - run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv twine build delvewheel
+          python -m build
+
+
+    - name: Store the distribution packages
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-package-distributions
+        path: wheelhouse/
+
+  publish-to-pypi:
+    name: Publish Python distribution to PyPI
+    if: ${{ always() }}
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pyshtools
+    permissions:
+      id-token: write
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+    - name: Publish distribution to PyPi
+      uses: pypa/gh-action-pypi-publish@release/v1
