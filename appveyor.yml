@@ -105,7 +105,7 @@ install:
   - python -m pip install -U pip build delvewheel
 
 build_script:
-  - ps: $env:Path += ';C:\msys64\usr\bin'
+  - SET PATH=%PATH%;c:\msys64\usr\bin
   
   - cd %APPVEYOR_BUILD_FOLDER%\SHTOOLS
 
